@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{655BB3E3-4503-1FEC-0114-5E863F19AD50}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "TrainMobileModest",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"MediaAssets"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "WebBrowserWidget",
+			"Enabled": true
+		}
+	]
+}

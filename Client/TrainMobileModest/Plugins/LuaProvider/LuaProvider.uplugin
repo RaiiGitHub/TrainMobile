@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "LuaProvider",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "Lua module for train-mobile.",
+	"CreatedByURL": "http://www.resafety.com/mobile/",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "LuaProvider",
+			"Type": "Developer",
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [ "Android", "Mac", "Win32", "Win64"]
+		}
+	]
+}

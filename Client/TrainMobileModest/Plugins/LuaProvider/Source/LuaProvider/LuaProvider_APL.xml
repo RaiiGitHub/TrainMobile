@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+  <init>
+    <log text="Lua Provider Plugin Init"/>
+  </init>
+  <prebuildCopies>
+    <log text="Copying java source code before build"/>
+    <!--copyFile src="$S(ProjectDir)/Plugins/LuaProvider/Source/LuaProvider/APKUpdater.java"
+						dst="$S(BuildDir)/src/com/epicgames/ue4/APKUpdater.java" /-->
+    <copyDir src="$S(ProjectDir)/Plugins/LuaProvider/Source/LuaProvider/Java"
+			    dst="$S(BuildDir)/src/com/DeepEye/TrainMobileModest/" />
+  </prebuildCopies>
+  <!-- optional files or directories to copy to Intermediate/Android/APK -->
+  <resourceCopies>
+    <log text="Copying LuaProvider library directory"/>
+    <copyDir src="$S(ProjectDir)/Plugins/LuaProvider/Content/Lib/Android/armeabi-v7a"
+					dst="$S(BuildDir)/libs/armeabi-v7a/"/>
+    <log text="Copying LuaProvider script directory"/>
+    <copyDir src="$S(ProjectDir)/Plugins/LuaProvider/Source/LuaProvider/Lua/Script"
+					dst="$S(BuildDir)/assets/" />
+    <!--isArch arch="armeabi-v7a">
+      <copyFile src="$S(ProjectDir)/Plugins/LuaProvider/Content/Lib/Android/armeabi-v7a/liblua.so"
+						dst="$S(BuildDir)/libs/armeabi-v7a/liblua.so" />
+    </isArch-->
+  </resourceCopies>
+  <gameActivityImportAdditions>
+  <insert>
+    import android.os.Environment;
+    import android.os.Message;
+    import android.os.Handler;
+    import java.io.BufferedReader;
+    import java.io.File;
+    import java.io.FileOutputStream;
+    import java.io.IOException;
+    import java.io.InputStream;
+    import java.io.InputStreamReader;
+    import java.io.FileDescriptor;
+    import java.io.FileInputStream;
+    import java.util.ArrayList;
+    import java.util.List;
+    
+    import android.net.Uri;
+    import java.io.OutputStream;
+    import android.widget.Toast;
+    import com.DeepEye.TrainMobileModest.ApkDownloader;
+  </insert>
+  </gameActivityImportAdditions>
+  <gameActivityClassAdditions>
+    <insert>
+    public native void nativeSetInnerPath(String PathName,String CPathName);
+    public native void nativeDownloadPercent(int threadid,int blocktotal,int blockdownloaded);
+    public void installAPK(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse("file://" + file.toString()), "application/vnd.android.package-archive");
+        startActivity(intent);
+    }
+    public Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case 1:
+            { 
+                Bundle bundle = msg.getData();
+                String message = bundle.getString("msg");
+                Toast.makeText(_activity.getApplicationContext(), message,Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case 2:
+            {
+                Bundle bundle = msg.getData();
+                String apkfile = bundle.getString("apkfile");
+                _activity.installAPK(apkfile);
+                break;
+            }
+            default:
+                break;
+            }
+       }
+    };
+      private static String NewerAPKUrl;
+      public void AndroidThunkJava_DownloadAndInstallAPK(String APKUrl,String Msg)//run the apk updater,with the thunk url param from c++ side.
+      {
+      // Start apk-download-install thread
+      Log.debug("==============> Starting apk-download-install activity.url:"+APKUrl);
+      boolean wifi = AndroidThunkJava_HasActiveWiFiConnection();
+      NewerAPKUrl = APKUrl;
+      if( false == wifi )
+      {
+      new AlertDialog.Builder(_activity)
+      .setTitle("Warning")
+      .setMessage(Msg)
+      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int whichButton) {
+      //run downloader.
+      try{
+      ApkDownloader.begin(NewerAPKUrl,_activity);
+      } catch (Exception e) {
+      e.printStackTrace();
+      }
+      dialog.dismiss();
+      }
+      })
+      .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int whichButton) {
+      dialog.dismiss();
+      }
+      })
+      .show();
+      }
+      else
+      {
+      //run downloader.
+      try{
+      ApkDownloader.begin(NewerAPKUrl,_activity);
+      }catch (Exception e) {
+      e.printStackTrace();
+      }
+      }
+      }
+      private static final String ASSET_LIST_FILENAME = "assets.lst";
+      private File mAppDirectory;
+      public boolean copy() throws IOException {
+
+      List&lt;String&gt; srcFiles = new ArrayList&lt;String&gt;();
+    
+    	mAppDirectory = getApplicationContext().getFilesDir();
+    	if (null == mAppDirectory) {
+        	return false;
+    	}
+    	Log.debug("==================================> appDir~>"+mAppDirectory.getAbsolutePath());
+    	List&lt;String&gt; assets = getAssetsList(); 
+    	for( String asset : assets ) {           
+    	if( ! new File(mAppDirectory,asset).exists() ) {
+        	srcFiles.add(asset);
+        	}
+    	}             
+    	for( String file : srcFiles ) {
+        	copy(file);
+    	}
+    	return true;
+	}
+	protected List&lt;String&gt; getAssetsList() throws IOException {
+    	List&lt;String&gt; files = new ArrayList&lt;String&gt;();
+    	InputStream listFile = getAssets().open(new File(ASSET_LIST_FILENAME).getPath());
+    	BufferedReader br = new BufferedReader(new InputStreamReader(listFile));
+    	String path;
+        	while (null != (path = br.readLine())) {
+        	files.add(path);
+        	}
+        	return files;
+	}
+	protected File copy( String asset ) throws IOException {  
+    	String assetPath = new File(asset).getPath();
+    	InputStream source = getAssets().open(assetPath);
+    	File destinationFile = new File(mAppDirectory, asset);
+    	//destinationFile.getParentFile().mkdirs();
+    	OutputStream destination = new FileOutputStream(destinationFile);
+    	byte[] buffer = new byte[1024];
+    	int nread;
+    	while ((nread = source.read(buffer)) != -1) {
+        	if (nread == 0) {
+            	nread = source.read();
+            	if (nread &lt; 0)
+                	break;
+            	destination.write(nread);
+            	continue;
+        	}
+        	destination.write(buffer, 0, nread);
+    	}
+    	destination.close(); 
+    	return destinationFile;
+	}
+	//try to find inner storage of the files.
+	protected void TraceInnerFiles() throws IOException{
+    	List&lt;String&gt; assets = getAssetsList(); 
+    	for( String asset : assets ) { 
+					List&lt;File&gt; examinfile = new ArrayList&lt;File&gt;();
+					String filesdir = getApplicationContext().getFilesDir().getAbsolutePath();
+					String respath = getApplicationContext().getPackageResourcePath();
+					String packagename = getApplicationContext().getPackageName();
+					String datadir = android.os.Environment.getDataDirectory().getAbsolutePath();
+					examinfile.add(new File(filesdir, asset));
+					examinfile.add(new File(filesdir+"/../lib", asset));
+					examinfile.add(new File(respath, asset));
+					examinfile.add(new File(respath+"/lib", asset));
+					examinfile.add(new File(datadir+"/data/"+packagename+"/lib", asset));
+					for( File f : examinfile ) {
+        		String x = "not found!";
+						if (f.exists())
+							x = "found!";
+						Log.debug("==================================> files~>"+f.getAbsolutePath()+","+x);
+    			}
+    	}             
+	}
+    </insert>
+  </gameActivityClassAdditions>
+
+  <gameActivityOnCreateAdditions>
+  <insert>
+		//Note:copy lua files to storage.
+		try {
+		  this.copy();
+			TraceInnerFiles();
+		} catch (IOException e) { 
+			System.out.println("==================================> file may not found~>" + e.getMessage());
+			e.printStackTrace();
+		}
+		//set lua search path
+		String filesdir = getApplicationContext().getFilesDir().getAbsolutePath()+"/";
+		this.nativeSetInnerPath(filesdir,filesdir+"../lib/");
+  </insert>
+  </gameActivityOnCreateAdditions>
+  
+  
+  <!-- optional libraries to load in GameActivity.java before libUE4.so -->
+  <soLoadLibrary>
+    <!-- need this if plugin enabled and supported architecture, even if not packaged for Lua -->
+    <log text="Try to load lua library toolchain."/>
+    <loadLibrary name="lua" failmsg="lua library not loaded and required!" />
+  </soLoadLibrary>
+</root>
+
+

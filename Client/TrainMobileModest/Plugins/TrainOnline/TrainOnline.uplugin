@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "TrainOnline",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "Online module for train-mobile.",
+	"CreatedByURL": "http://www.resafety.com/mobile/",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "TrainOnline",
+			"Type": "Developer",
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [ "Android", "Mac", "Win32", "Win64"]
+		}
+	]
+}

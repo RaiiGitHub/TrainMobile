@@ -67,6 +67,8 @@ public:
 	TArray<FTaskDataMeta> TaskDataMeta;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ScriptTaskData)
 	FString Memo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ScriptTaskData)
+	FString TypeName;
 };
 
 USTRUCT(BlueprintType)

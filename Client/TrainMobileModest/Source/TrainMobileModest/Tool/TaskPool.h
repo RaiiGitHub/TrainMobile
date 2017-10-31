@@ -30,6 +30,7 @@ public:
 	TaskStateMachine task_fsm_;
 protected:
 	RUNTIME_TASK_BASE::TaskScriptPtr current_task_script_ptr_;
+	RUNTIME_TASK_BASE::TaskScriptList task_script_list_;
 	RUNTIME_TASK_BASE::TaskPtr current_task_ptr_;
 	RUNTIME_TASK_BASE::TaskList current_active_task_list_;
 	RUNTIME_TASK_BASE::RoleList current_role_list_;//from blueprint
@@ -218,4 +219,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	FString GetActiveScriptName() const;
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	TArray<FString> GetScriptTypeNames() const;
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	TArray<FString> GetScriptNamesOfType(const FString& script_type_name) const;
 };

@@ -94,6 +94,7 @@ namespace RUNTIME_TASK_BASE
 		int task_script_index_;
 		FString task_script_name_;
 		FString script_memo_;
+		FString script_type_name_;
 	};
 	typedef TSharedPtr<TaskScript> TaskScriptPtr;
 	typedef TDoubleLinkedList<TaskScriptPtr> TaskScriptList;

@@ -54,6 +54,9 @@ void ATaskPool::ReadTask()
 			RUNTIME_TASK_BASE::TaskScriptPtr ts = MakeShareable(new RUNTIME_TASK_BASE::TaskScript(script_index++));
 			ts->script_memo_ = script_unit->Memo;
 			ts->task_script_name_ = script_unit->ScriptName;
+			ts->active_ = false;
+			ts->script_type_name_ = script_unit->TypeName;
+			task_script_list_.AddTail(ts);
 
 			TArray<FTaskData*> task_rows;
 			TArray<FRoleGoodsTexture*> task_goods;
@@ -1242,21 +1245,50 @@ FScriptTaskData ATaskPool::GetTaskScriptByIndex(const int index)
 
 void ATaskPool::SetActiveScript(const FString & script_name, bool active)
 {
-	RUNTIME_TASK_BASE::TaskScriptPtr ts = TaskReader::GetTaskScriptByName(script_name);
-	if (ts.Get())
-		ts->active_ = active;
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get())
+		{
+			script->active_ = script->task_script_name_.Equals(script_name) & active;
+		}
+	}
 }
 
 FString ATaskPool::GetActiveScriptName() const
 {
-	for (auto& task : task_list_)
+	for (auto& script : task_script_list_)
 	{
-		if (task->bind_script_.Get()
-			&& task->bind_script_->active_)
+		if (script.Get() && script->active_)
 		{
-			return task->bind_script_->task_script_name_;
+			return script->task_script_name_;
 		}
 	}
 	return FString();
+}
+
+TArray<FString> ATaskPool::GetScriptTypeNames() const
+{
+	TArray<FString> stn;
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get())
+		{
+			stn.AddUnique(script->script_type_name_);
+		}
+	}
+	return stn;
+}
+
+TArray<FString> ATaskPool::GetScriptNamesOfType(const FString & script_type_name) const
+{
+	TArray<FString> sn;
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get() && script->script_type_name_.Equals(script_type_name))
+		{
+			sn.AddUnique(script->task_script_name_);
+		}
+	}
+	return sn;
 }
 

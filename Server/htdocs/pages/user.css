@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* CSS Document */
+/*background-color: #8bb7db;*/
+body{padding:0; margin:0;color:#fff;}
+.kuang1{ width:926px; height:853px; background:url(userbg.png) no-repeat; margin:0 auto;padding-top:48px;}
+.usertitle{ text-align:center; font-size:44px; font-weight:bold;color:#266ab1; text-shadow:1px 1px 1px #fff }
+.usercon table{ margin-top:50px;}
+.usercon table td { text-align:left; line-height:57px; font-size:34px; text-shadow:1px 1px 1px #000; color:#fff }
+.usercon table td.center{ text-align:center}
+.usercon table td.blue{ color:#70cdff}
+.button{ width:226px; height:73px; background:url(gp_button.png) no-repeat; text-align:center; font-size:36px; line-height:73px; border:none; color:#fff; font-weight:bold; margin-top:13px; text-shadow:1px 1px 1px #444 }

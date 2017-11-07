@@ -61,6 +61,14 @@ enum ETaskActionPassbyResultType
 	E_APRT_USER_NOT_FOUND =3
 };
 
+UENUM(BlueprintType)
+enum EScriptState
+{
+	EScriptState_Active = 1,
+	EScriptState_Inactive = 2,
+	EScriptState_Unvalid = 3
+};
+
 USTRUCT(BlueprintType)
 struct FGameKeyValue
 {

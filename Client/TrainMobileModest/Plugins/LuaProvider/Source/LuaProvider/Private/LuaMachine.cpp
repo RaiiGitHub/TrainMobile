@@ -1,7 +1,7 @@
 #include "LuaProviderPrivatePCH.h"
 #include "LuaMachine.h"
 #include "Misc/Paths.h"
-
+#include "HAL/PlatformApplicationMisc.h"
 
 FString FLuaMachine::LuaSearchPath;
 FString FLuaMachine::LuaSearchCPath;
@@ -49,7 +49,7 @@ void FLuaMachine::Initialize()
 {
 	UE_LOG(LuaProviderPlugin, Log, TEXT("FLuaMachine::Initialize(or Re-initialize)"));
 	// By default, go ahead and disable the screen saver. The user can still change this freely
-	FPlatformMisc::ControlScreensaver(FGenericPlatformMisc::Disable);
+	FPlatformApplicationMisc::ControlScreensaver(FPlatformApplicationMisc::EScreenSaverAction::Disable);
 	Close();
 	LuaState = LuaNewState();
 	luaL_openlibs(LuaState);

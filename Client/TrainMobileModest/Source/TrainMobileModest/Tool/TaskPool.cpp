@@ -56,6 +56,7 @@ void ATaskPool::ReadTask()
 			ts->task_script_name_ = script_unit->ScriptName;
 			ts->active_ = false;
 			ts->script_type_name_ = script_unit->TypeName;
+			ts->script_icon_path_ = script_unit->IconPath;
 			task_script_list_.AddTail(ts);
 
 			TArray<FTaskData*> task_rows;
@@ -1227,6 +1228,7 @@ FScriptTaskData ATaskPool::GetTaskScriptByName(const FString& script_name) const
 	{
 		st.Memo = ts->script_memo_;
 		st.ScriptName = ts->task_script_name_;
+		st.IconPath = ts->task_script_name_;
 	}
 	return st;
 }
@@ -1239,6 +1241,7 @@ FScriptTaskData ATaskPool::GetTaskScriptByIndex(const int index)
 	{
 		st.Memo = ts->script_memo_;
 		st.ScriptName = ts->task_script_name_;
+		st.IconPath = ts->script_icon_path_;
 	}
 	return st;
 }
@@ -1252,6 +1255,18 @@ void ATaskPool::SetActiveScript(const FString & script_name, bool active)
 			script->active_ = script->task_script_name_.Equals(script_name) & active;
 		}
 	}
+}
+
+EScriptState ATaskPool::IsActiveScript(const FString & script_name)
+{
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get() && script->task_script_name_.Equals(script_name))
+		{
+			return script->active_? EScriptState_Active: EScriptState_Inactive;
+		}
+	}
+	return EScriptState_Unvalid;
 }
 
 FString ATaskPool::GetActiveScriptName() const
@@ -1290,5 +1305,23 @@ TArray<FString> ATaskPool::GetScriptNamesOfType(const FString & script_type_name
 		}
 	}
 	return sn;
+}
+
+TArray<FScriptTaskData> ATaskPool::GetScriptEssentialOfType(const FString & script_type_name) const
+{
+	TArray<FScriptTaskData> data;
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get() && script->script_type_name_.Equals(script_type_name))
+		{
+			FScriptTaskData _d;
+			_d.IconPath = script->script_icon_path_;
+			_d.ScriptName = script->task_script_name_;
+			_d.TypeName = script_type_name;
+			_d.Memo = script->script_memo_;
+			data.Add(_d);
+		}
+	}
+	return data;
 }
 

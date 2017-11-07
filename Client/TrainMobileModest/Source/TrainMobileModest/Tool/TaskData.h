@@ -69,6 +69,8 @@ public:
 	FString Memo;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ScriptTaskData)
 	FString TypeName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ScriptTaskData)
+	FString IconPath;
 };
 
 USTRUCT(BlueprintType)

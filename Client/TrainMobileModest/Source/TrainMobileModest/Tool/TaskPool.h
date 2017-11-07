@@ -6,6 +6,7 @@
 #include "TaskBase.h"
 #include "TaskStateMachine.h"
 #include "TaskPoolInterface.h"
+#include "GameUtilityBlueprintStruct.h"
 #include "TaskPool.generated.h"
 
 UCLASS()
@@ -218,6 +219,9 @@ public:
 	void SetActiveScript(const FString& script_name,bool active = true );
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	EScriptState IsActiveScript(const FString& script_name);
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	FString GetActiveScriptName() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
@@ -225,4 +229,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	TArray<FString> GetScriptNamesOfType(const FString& script_type_name) const;
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	TArray<FScriptTaskData> GetScriptEssentialOfType(const FString& script_type_name) const;
 };

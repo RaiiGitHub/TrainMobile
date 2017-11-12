@@ -80,12 +80,11 @@ int TaskReader::GetTaskListByScriptName(const FString & script_name, RUNTIME_TAS
 
 RUNTIME_TASK_BASE::TaskScriptPtr TaskReader::GetTaskScriptByName(const FString & script_name) const
 {
-	for (auto& task : task_list_)
+	for (auto& script : task_script_list_)
 	{
-		if (task->bind_script_.Get()
-			&& task->bind_script_->task_script_name_.Equals(script_name, ESearchCase::IgnoreCase))
+		if (script.Get() && script->task_script_name_.Equals(script_name, ESearchCase::IgnoreCase))
 		{
-			return task->bind_script_;
+			return script;
 		}
 	}
 	return RUNTIME_TASK_BASE::TaskScriptPtr();
@@ -93,12 +92,11 @@ RUNTIME_TASK_BASE::TaskScriptPtr TaskReader::GetTaskScriptByName(const FString &
 
 RUNTIME_TASK_BASE::TaskScriptPtr TaskReader::GetTaskScriptByIndex(const int index) const
 {
-	for (auto& task : task_list_)
+	for (auto& script : task_script_list_)
 	{
-		if (task->bind_script_.Get()
-			&& task->bind_script_->task_script_index_ == index )
+		if (script.Get() && script->task_script_index_ == index )
 		{
-			return task->bind_script_;
+			return script;
 		}
 	}
 	return RUNTIME_TASK_BASE::TaskScriptPtr();

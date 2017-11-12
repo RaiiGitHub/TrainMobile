@@ -18,7 +18,7 @@ public class LuaProvider : ModuleRules
         {
             PublicLibraryPaths.Add(Path.Combine(ModuleDirectory,"../../Content", "Lib", "Android", "armeabi-v7a"));
             PublicAdditionalLibraries.Add("lua");
-            string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
+            string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target/*BuildConfiguration*/.RelativeEnginePath);
             AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "LuaProvider_APL.xml")));
         }
 		

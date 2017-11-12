@@ -154,5 +154,6 @@ public:
 	RUNTIME_TASK_BASE::RolePtr GetTaskRoleByName(const FString& script_name,const FString& role_name) const;//just try to find the role
 public:
 	RUNTIME_TASK_BASE::TaskList task_list_;
+	RUNTIME_TASK_BASE::TaskScriptList task_script_list_;
 };
 

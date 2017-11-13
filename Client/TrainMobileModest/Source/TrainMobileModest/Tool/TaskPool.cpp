@@ -65,6 +65,7 @@ void ATaskPool::ReadTask()
 			TArray<FRoleFirstSight*> task_first_sights;
 			for (auto& meta : script_unit->TaskDataMeta)
 			{
+				ts->meta_tables_.Add(meta.MetaType, meta.MetaName);
 				UDataTable* data_table = LoadObject<UDataTable>(NULL, *meta.MetaName);
 				if (nullptr != data_table)
 				{
@@ -1220,30 +1221,46 @@ int ATaskPool::GetTaskScriptNum()
 	return max_script_index;
 }
 
+FScriptTaskData ATaskPool::GetScriptData(const RUNTIME_TASK_BASE::TaskScriptPtr & sp) const
+{
+	FScriptTaskData st;
+	if (sp.Get())
+	{
+		st.Memo = sp->script_memo_;
+		st.ScriptName = sp->task_script_name_;
+		st.IconPath = sp->task_script_name_;
+		for (auto& meta : sp->meta_tables_)
+		{
+			FTaskDataMeta tdm;
+			tdm.MetaType = (ETaskDataMetaType)meta.Key;
+			tdm.MetaName = meta.Value;
+			st.TaskDataMeta.Add(tdm);
+		}
+	}
+	return st;
+}
+
+
 FScriptTaskData ATaskPool::GetTaskScriptByName(const FString& script_name) const
 {
 	RUNTIME_TASK_BASE::TaskScriptPtr ts = TaskReader::GetTaskScriptByName(script_name);
-	FScriptTaskData st;
-	if (ts.Get())
-	{
-		st.Memo = ts->script_memo_;
-		st.ScriptName = ts->task_script_name_;
-		st.IconPath = ts->task_script_name_;
-	}
-	return st;
+	return GetScriptData(ts);
 }
 
 FScriptTaskData ATaskPool::GetTaskScriptByIndex(const int index)
 {
 	RUNTIME_TASK_BASE::TaskScriptPtr ts = TaskReader::GetTaskScriptByIndex(index);
-	FScriptTaskData st;
-	if (ts.Get())
+	return GetScriptData(ts);
+}
+
+FScriptTaskData ATaskPool::GetActiveScript()
+{
+	for (auto& ts : task_script_list_)
 	{
-		st.Memo = ts->script_memo_;
-		st.ScriptName = ts->task_script_name_;
-		st.IconPath = ts->script_icon_path_;
+		if (ts.Get() && ts->active_)
+			return GetScriptData(ts);
 	}
-	return st;
+	return FScriptTaskData();
 }
 
 void ATaskPool::SetActiveScript(const FString & script_name, bool active)

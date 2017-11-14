@@ -96,6 +96,7 @@ namespace RUNTIME_TASK_BASE
 		FString script_memo_;
 		FString script_type_name_;
 		FString script_icon_path_;
+		FString script_main_level_name_;
 		TMap<int, FString> meta_tables_;
 	};
 	typedef TSharedPtr<TaskScript> TaskScriptPtr;

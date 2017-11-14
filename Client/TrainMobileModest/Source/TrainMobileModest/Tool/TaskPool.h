@@ -228,6 +228,9 @@ public:
 	FString GetActiveScriptName() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	FString GetActiveScriptMainLevelName() const;
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	TArray<FString> GetScriptTypeNames() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")

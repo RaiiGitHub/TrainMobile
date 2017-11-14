@@ -57,6 +57,7 @@ void ATaskPool::ReadTask()
 			ts->active_ = false;
 			ts->script_type_name_ = script_unit->TypeName;
 			ts->script_icon_path_ = script_unit->IconPath;
+			ts->script_main_level_name_ = script_unit->MainLevelName;
 			task_script_list_.AddTail(ts);
 
 			TArray<FTaskData*> task_rows;
@@ -240,7 +241,10 @@ RUNTIME_TASK_BASE::TaskPtr ATaskPool::GetSpecificTask(int task_index)
 {
 	for (auto& task : task_list_)
 	{
-		if (task.Get() && task_index == task->task_index_)
+		if (task.Get() 
+			&& task->bind_script_.Get() 
+			&& task->bind_script_->active_
+			&& task_index == task->task_index_)
 			return task;
 	}
 	return RUNTIME_TASK_BASE::TaskPtr();
@@ -250,7 +254,9 @@ STATIC_TASK_BASE::TaskItemPtr ATaskPool::GetSpecificTaskItem(int task_index, int
 {
 	for (auto& task : task_list_)
 	{
-		if (task.Get() && task_index == task->task_index_ )
+		if (task.Get() 
+			&& task->bind_script_.Get() && task->bind_script_->active_
+			&& task_index == task->task_index_ )
 		{
 			for (auto& item : task->task_item_list_)
 			{
@@ -267,7 +273,9 @@ STATIC_TASK_BASE::TaskItemActionPtr ATaskPool::GetSpecificTaskItemAction(int tas
 {
 	for (auto& task : task_list_)
 	{
-		if (task.Get() && task_index == task->task_index_)
+		if (task.Get()
+			&& task->bind_script_.Get() && task->bind_script_->active_
+			&& task_index == task->task_index_)
 		{
 			for (auto& item : task->task_item_list_)
 			{
@@ -309,12 +317,10 @@ RUNTIME_TASK_BASE::TaskList & ATaskPool::GetCurrentActiveTaskList()
 RUNTIME_TASK_BASE::RolePtr  ATaskPool::GetRoleByRoleName(const FString & name)
 {
 	// TODO: insert return statement here
-	// go through all tasks, to get the role?
-	// temporary only support one role to find.
-
 	for (auto& task : task_list_)
 	{
-		if (task->bind_role_.Get())
+		if (task->bind_role_.Get() 
+			&& task->bind_script_.Get() && task->bind_script_->active_)
 		{
 			if (task->bind_role_->role_name_.Equals(name, ESearchCase::IgnoreCase))
 			{
@@ -805,7 +811,8 @@ bool ATaskPool::GetTaskItemContentByRoleName(const FString & role_name, FString 
 	task_item.Empty();
 	for (auto& task : task_list_)
 	{
-		if (task.Get())
+		if (task.Get() 
+			&& task->bind_script_.Get() && task->bind_script_->active_)
 		{
 			if (task->bind_role_.Get() && task->bind_role_->role_name_.Equals(role_name) )
 			{
@@ -824,7 +831,8 @@ bool ATaskPool::GetTaskItemActionByRoleName(const FString & role_name, TArray<FT
 	actions.Empty();
 	for (auto& task : task_list_)
 	{
-		if (task.Get())
+		if (task.Get() 
+			&& task->bind_script_.Get() && task->bind_script_->active_)
 		{
 			if (task->bind_role_.Get() && task->bind_role_->role_name_.Equals(role_name))
 			{
@@ -1066,7 +1074,8 @@ FTaskItemActionStatistics ATaskPool::GetStatisticsItemActionsByRoleName(const FS
 	//first one that is not been completed.
 	for (auto& task : current_active_task_list_)
 	{
-		if (task.Get())
+		if (task.Get() 
+			&& task->bind_script_.Get() && task->bind_script_->active_)
 		{
 			if (task->bind_role_.Get())
 			{
@@ -1212,13 +1221,7 @@ FScriptTaskDataStatistics ATaskPool::GetTaskScriptStatistics(const FString & scr
 
 int ATaskPool::GetTaskScriptNum()
 {
-	int max_script_index = 0;
-	for (auto& task : task_list_)
-	{
-		if (task.Get() && task->bind_script_.Get() )
-			max_script_index = FMath::Max(max_script_index, task->bind_script_->task_script_index_);
-	}
-	return max_script_index;
+	return task_script_list_.Num();
 }
 
 FScriptTaskData ATaskPool::GetScriptData(const RUNTIME_TASK_BASE::TaskScriptPtr & sp) const
@@ -1228,7 +1231,9 @@ FScriptTaskData ATaskPool::GetScriptData(const RUNTIME_TASK_BASE::TaskScriptPtr 
 	{
 		st.Memo = sp->script_memo_;
 		st.ScriptName = sp->task_script_name_;
-		st.IconPath = sp->task_script_name_;
+		st.IconPath = sp->script_icon_path_;
+		st.TypeName = sp->script_type_name_;
+		st.MainLevelName = sp->script_main_level_name_;
 		for (auto& meta : sp->meta_tables_)
 		{
 			FTaskDataMeta tdm;
@@ -1293,6 +1298,18 @@ FString ATaskPool::GetActiveScriptName() const
 		if (script.Get() && script->active_)
 		{
 			return script->task_script_name_;
+		}
+	}
+	return FString();
+}
+
+FString ATaskPool::GetActiveScriptMainLevelName() const
+{
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get() && script->active_)
+		{
+			return script->script_main_level_name_;
 		}
 	}
 	return FString();

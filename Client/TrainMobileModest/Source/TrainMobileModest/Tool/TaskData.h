@@ -71,6 +71,8 @@ public:
 	FString TypeName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ScriptTaskData)
 	FString IconPath;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ScriptTaskData)
+	FString MainLevelName;
 };
 
 USTRUCT(BlueprintType)

@@ -39,6 +39,7 @@ private:
 	bool PushToRolePool(const FString& role_name);
 	void EmptyRolePool();
 	bool ActiveRole(const RUNTIME_TASK_BASE::RolePtr& rp);
+	FScriptTaskData GetScriptData(const RUNTIME_TASK_BASE::TaskScriptPtr& sp) const;
 public:
 	void SetCurrentTask(const RUNTIME_TASK_BASE::TaskPtr& task_ptr);
 	RUNTIME_TASK_BASE::TaskPtr GetCurrentTask();
@@ -215,6 +216,9 @@ public:
 	FScriptTaskData GetTaskScriptByIndex(const int index);
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	FScriptTaskData GetActiveScript();
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	void SetActiveScript(const FString& script_name,bool active = true );
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
@@ -222,6 +226,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	FString GetActiveScriptName() const;
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	FString GetActiveScriptMainLevelName() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	TArray<FString> GetScriptTypeNames() const;

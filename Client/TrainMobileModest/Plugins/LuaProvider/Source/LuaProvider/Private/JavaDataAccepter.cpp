@@ -4,7 +4,7 @@
 #include "LuaMachine.h"
 #if PLATFORM_ANDROID
 #include "Runtime/Launch/Public/Android/AndroidJNI.h"
-#include "Runtime/Core/Public/Android/AndroidApplication.h"
+#include "Runtime/ApplicationCore/Public/Android/AndroidApplication.h"
 #endif
 TSharedPtr<FJavaDataAccepter> FJavaDataAccepter::JavaDataAccepterIns = MakeShareable<FJavaDataAccepter>(new FJavaDataAccepter);
 

@@ -98,6 +98,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TaskData)
 	FString Memo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TaskData)
+	FString WelcomTipsOffline;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TaskData)
+	FString WelcomTipsOnline;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TaskData)
+	int SuggestOrder;
+
 };
 
 USTRUCT(BlueprintType)

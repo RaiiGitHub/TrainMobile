@@ -238,4 +238,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	TArray<FScriptTaskData> GetScriptEssentialOfType(const FString& script_type_name) const;
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	TArray<int> SortTaskBySuggetOrder(TArray<int> arrRoleSelected,int cur_sel);
 };

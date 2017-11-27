@@ -93,6 +93,9 @@ void ATaskPool::ReadTask()
 			{
 				RUNTIME_TASK_BASE::TaskPtr tp = MakeShareable(new RUNTIME_TASK_BASE::Task(task_index++));
 				tp->task_name_ = task->Name;
+				tp->task_welcome_tips_offline = task->WelcomTipsOffline;
+				tp->task_welcome_tips_online = task->WelcomTipsOnline;
+				tp->suggest_order_ = task->SuggestOrder;
 
 				//read task_item_goods_tex
 				FRoleGoodsTexture* _rgt = nullptr;
@@ -372,6 +375,8 @@ FTaskData ATaskPool::GetTaskRowAt(const FString& script_name, int index)
 			{
 				fd.Name = a->task_name_;
 				fd.Role = a->bind_role_->role_name_;
+				fd.WelcomTipsOffline = a->task_welcome_tips_offline;
+				fd.WelcomTipsOnline = a->task_welcome_tips_online;
 				for (auto& item : a->task_item_list_)
 					fd.Content.Add(item->task_content_.Replace(TEXT("$"),TEXT("")));
 				break;
@@ -1357,5 +1362,23 @@ TArray<FScriptTaskData> ATaskPool::GetScriptEssentialOfType(const FString & scri
 		}
 	}
 	return data;
+}
+
+TArray<int> ATaskPool::SortTaskBySuggetOrder(TArray<int> arrRoleSelected,int cur_sel)
+{
+	//base sorting.
+	arrRoleSelected.Sort([=](const int& LHS, const int& RHS) {
+		RUNTIME_TASK_BASE::TaskPtr task_ptr_lhs = GetSpecificTask(LHS + 1);
+		RUNTIME_TASK_BASE::TaskPtr task_ptr_rhs = GetSpecificTask(RHS + 1);
+		if (task_ptr_lhs.Get() && task_ptr_rhs.Get())
+		{
+			if (task_ptr_lhs->suggest_order_ == task_ptr_rhs->suggest_order_)
+				return task_ptr_lhs->task_index_ - 1 == cur_sel;
+			else
+				return task_ptr_lhs->suggest_order_ < task_ptr_rhs->suggest_order_;
+		}
+		return false;
+	});
+	return arrRoleSelected;
 }
 

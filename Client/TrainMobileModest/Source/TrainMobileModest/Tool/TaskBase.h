@@ -125,7 +125,7 @@ namespace RUNTIME_TASK_BASE
 	class TRAINMOBILEMODEST_API Task
 	{
 	public:
-		Task(int index):task_index_(index), state(BState_INACTIVED){}
+		Task(int index):task_index_(index), suggest_order_(0),state(BState_INACTIVED){}
 		~Task() {}
 	public:
 		void ProduceFSMComponent(TaskStateMachine* fsm, const STATIC_TASK_BASE::TaskItemPtr& ti );//auto produce components for the fsm
@@ -136,10 +136,13 @@ namespace RUNTIME_TASK_BASE
 	public:
 		STATIC_TASK_BASE::TaskItemList	task_item_list_;
 		FString task_name_;
+		FString task_welcome_tips_offline;
+		FString task_welcome_tips_online;
 		RolePtr bind_role_;
 		TaskScriptPtr bind_script_;
 		EBaseState state;
 		int task_index_;
+		int suggest_order_;
 	};
 }
 

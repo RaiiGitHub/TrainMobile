@@ -1,4 +1,4 @@
-#define VERSION_4_18 0
+#define VERSION_4_18 1
 
 #include "LuaProviderPrivatePCH.h"
 #include "LuaMachine.h"

@@ -1,0 +1,12 @@
+{
+    "socket_server_port": 5060,
+    "apk_url": "pages\/TrainMobileModest-Android-Shipping-armv7-es2.apk",
+    "download_caption": "应用更新",
+    "version": "v1.2.0425",
+    "socket_server_ip": "172.16.42.12",
+    "exp_to_level_param1": 2,
+    "support": "DeepEye,2017",
+    "no_wifi_tips": "没有wifi信号，下载将会花费320Mb流量，确认下载吗？",
+    "exp_to_level_param2": 1,
+    "download_tips": "有可用的版本可以更新，要更新吗？"
+}

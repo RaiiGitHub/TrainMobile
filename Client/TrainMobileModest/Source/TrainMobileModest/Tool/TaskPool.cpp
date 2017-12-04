@@ -1273,6 +1273,18 @@ FScriptTaskData ATaskPool::GetActiveScript()
 	return FScriptTaskData();
 }
 
+int ATaskPool::GetActiveScriptIndex()
+{
+	for (auto& script : task_script_list_)
+	{
+		if (script.Get() && script->active_ )
+		{
+			return script->task_script_index_;
+		}
+	}
+	return 0;
+}
+
 void ATaskPool::SetActiveScript(const FString & script_name, bool active)
 {
 	for (auto& script : task_script_list_)

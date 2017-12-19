@@ -8,6 +8,7 @@
 #include "LuaProvider.h"
 #include "sprotodef.h"
 #include "HumanCharacter.h"
+#include "GlobalValueContainer.h"
 #include "Runtime/WebBrowser/Public/IWebBrowserSingleton.h"
 #include "Runtime/WebBrowser/Public/WebBrowserModule.h"
 #include "Runtime/WebBrowser/Public/IWebBrowserCookieManager.h"
@@ -83,6 +84,8 @@ void UTrainGameInstance::Init()
 		LSM.Add(TEXT("state_in_game"), LOBBY_IN_GAME);
 	}
 	GameReady = true;
+
+	UGlobalValueContainer::AssignSystemKeyValues();
 }
 
 void UTrainGameInstance::Shutdown()

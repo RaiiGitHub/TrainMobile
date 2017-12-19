@@ -219,7 +219,7 @@ public:
 	FScriptTaskData GetActiveScript();
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
-	int GetActiveScriptIndex();
+	int GetActiveScriptIndex() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	void SetActiveScript(const FString& script_name,bool active = true );

@@ -1149,9 +1149,13 @@ void ATaskPool::GetAllTaskItemActionWithSuggestOrder(TArray<FTaskItemAction>& ac
 			}
 		}
 	}
-	actions.Sort([](const FTaskItemAction& LHS, const FTaskItemAction& RHS) { 
-		return LHS.ActSuggestOrder < RHS.ActSuggestOrder; 
-	});
+	if (actions.Num() > 1)
+	{
+		actions.Sort([](const FTaskItemAction& LHS, const FTaskItemAction& RHS) {
+			return LHS.ActSuggestOrder < RHS.ActSuggestOrder;
+		});
+	}
+
 }
 
 void ATaskPool::GetRoleTaskItemActionWithSuggestOrder(TArray<FTaskItemAction>& actions, const int script_index, const int role_index)
@@ -1189,9 +1193,12 @@ void ATaskPool::GetRoleTaskItemActionWithSuggestOrder(TArray<FTaskItemAction>& a
 			}
 		}
 	}
-	actions.Sort([](const FTaskItemAction& LHS, const FTaskItemAction& RHS) {
-		return LHS.ActSuggestOrder < RHS.ActSuggestOrder;
-	});
+	if (actions.Num() > 1)
+	{
+		actions.Sort([](const FTaskItemAction& LHS, const FTaskItemAction& RHS) {
+			return LHS.ActSuggestOrder < RHS.ActSuggestOrder;
+		});
+	}
 }
 
 FString ATaskPool::GetTaskScriptTableNameByMeta(const TArray<FTaskDataMeta>& tdm, ETaskDataMetaType type) const
@@ -1273,7 +1280,7 @@ FScriptTaskData ATaskPool::GetActiveScript()
 	return FScriptTaskData();
 }
 
-int ATaskPool::GetActiveScriptIndex()
+int ATaskPool::GetActiveScriptIndex() const
 {
 	for (auto& script : task_script_list_)
 	{
@@ -1379,18 +1386,21 @@ TArray<FScriptTaskData> ATaskPool::GetScriptEssentialOfType(const FString & scri
 TArray<int> ATaskPool::SortTaskBySuggetOrder(TArray<int> arrRoleSelected,int cur_sel)
 {
 	//base sorting.
-	arrRoleSelected.Sort([=](const int& LHS, const int& RHS) {
-		RUNTIME_TASK_BASE::TaskPtr task_ptr_lhs = GetSpecificTask(LHS + 1);
-		RUNTIME_TASK_BASE::TaskPtr task_ptr_rhs = GetSpecificTask(RHS + 1);
-		if (task_ptr_lhs.Get() && task_ptr_rhs.Get())
-		{
-			if (task_ptr_lhs->suggest_order_ == task_ptr_rhs->suggest_order_)
-				return task_ptr_lhs->task_index_ - 1 == cur_sel;
-			else
-				return task_ptr_lhs->suggest_order_ < task_ptr_rhs->suggest_order_;
-		}
-		return false;
-	});
+	if (arrRoleSelected.Num() > 1)
+	{
+		arrRoleSelected.Sort([=](const int& LHS, const int& RHS) {
+			RUNTIME_TASK_BASE::TaskPtr task_ptr_lhs = GetSpecificTask(LHS + 1);
+			RUNTIME_TASK_BASE::TaskPtr task_ptr_rhs = GetSpecificTask(RHS + 1);
+			if (task_ptr_lhs.Get() && task_ptr_rhs.Get())
+			{
+				if (task_ptr_lhs->suggest_order_ == task_ptr_rhs->suggest_order_)
+					return task_ptr_lhs->task_index_ - 1 == cur_sel;
+				else
+					return task_ptr_lhs->suggest_order_ < task_ptr_rhs->suggest_order_;
+			}
+			return false;
+		});
+	}
 	return arrRoleSelected;
 }
 

@@ -38,3 +38,8 @@ void UUserWidgetWrapper::OnTextChanged(const FString ObjectName, const FText Tex
 	if (WidgetLogicHandler.Get())
 		WidgetLogicHandler->OnTextChanged(ObjectName, Text);
 }
+
+WidgetLogicBase * UUserWidgetWrapper::GetWidgetLogic()
+{
+	return WidgetLogicHandler.Get();
+}

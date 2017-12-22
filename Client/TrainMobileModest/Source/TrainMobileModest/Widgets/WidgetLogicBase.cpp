@@ -23,6 +23,13 @@ UUserWidget * WidgetLogicBase::GetUserWidget()
 	return UserWidget;
 }
 
+TSubclassOf<UUserWidget> WidgetLogicBase::CreateUserWidgetClass(UObject* context, const FString& path)
+{
+	if (context && !path.IsEmpty())
+		return LoadClass<UUserWidget>(context, *path);
+	return TSubclassOf<UUserWidget>();
+}
+
 void WidgetLogicFactoryManager::AddFactory(WidgetLogicFactoryPtr & factory)
 {
 	WidgetFactories.AddUnique(factory);

@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	void OnTextChanged(const FString ObjectName,const FText Text);
 
+public:
+	class WidgetLogicBase* GetWidgetLogic();
+
 protected:
 	TSharedPtr<class WidgetLogicBase> WidgetLogicHandler;
 };

@@ -10,23 +10,27 @@ public:
 	WidgetLogicBase():UserWidget(nullptr){}
 	virtual ~WidgetLogicBase() {}
 public:
-	void         SetName(const FString& name);
-	FString      GetName();
-	void         SetUserWidget(UUserWidget* widget);
-	UUserWidget* GetUserWidget();
+	void               SetName(const FString& name);
+	FString            GetName();
+	virtual FString    GetBlueprintClassPath() { return FString(); }
+	void               SetUserWidget(UUserWidget* widget);
+	UUserWidget*       GetUserWidget();
 public:
-	virtual void OnButtonClick(const FString ObjectName) {}
-	virtual void OnTextChanged(const FString ObjectName,const FText Text) {}
-	virtual void OnConstruct() {}
-	virtual void OnDestruct() {}
-private:
-	FString WidgetName;
+	virtual void       OnButtonClick(const FString ObjectName) {}
+	virtual void       OnTextChanged(const FString ObjectName,const FText Text) {}
+	virtual void       OnConstruct() {}
+	virtual void       OnDestruct() {}
+public:
+	static TSubclassOf<UUserWidget> CreateUserWidgetClass(UObject* context,const FString& path);
+
 protected:
 	class UUserWidget* UserWidget;
+	FString WidgetName;
 };
 typedef TSharedPtr<WidgetLogicBase> WidgetLogicPtr;
 typedef TArray<WidgetLogicPtr> WidgetLogicArray;
-
+#define DECLARE_GETBLUEPRINTCLASSPATH(T) static FString BlueprintClassPath; virtual FString GetBlueprintClassPath() override { return T::BlueprintClassPath;}
+#define IMPL_GETBLUEPRINTCLASSPATH(T,P) FString T::BlueprintClassPath = TEXT(#P);
 
 class WidgetLogicFactoryBase 
 {

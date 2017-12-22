@@ -3,6 +3,8 @@
 #include "TrainGameInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "GlobalValueContainer.h"
+#include "WidgetLogicSimpleMessage.h"
+#include "UserWidgetWrapper.h"
 #include "DisplayContent.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "Runtime/UMG/Public/UMGStyle.h"
@@ -11,11 +13,11 @@
 #include "Runtime/UMG/Public/Blueprint/UserWidget.h"
 
 WIDGET_LOGIC_FACTORY_REG(WidgetLogicLogin);
+IMPL_GETBLUEPRINTCLASSPATH(WidgetLogicLogin, WidgetBlueprint'/Game/Widget/UserLogin.UserLogin_C');
 
 WidgetLogicLogin::WidgetLogicLogin()
 {
 }
-
 
 WidgetLogicLogin::~WidgetLogicLogin()
 {
@@ -113,6 +115,14 @@ void WidgetLogicLogin::SetUserPsw(const FString & psw)
 		pText->SetText(FText::FromString(psw));
 }
 
+void WidgetLogicLogin::EnterMainMenu()
+{
+	if (nullptr == UTrainGameInstance::Instance || nullptr == UserWidget)
+		return;
+	UGlobalValueContainer::RemoveWidgetFromViewport(UserWidget);
+	//create mainmenu widget.
+}
+
 bool WidgetLogicLogin::PasswordMode(const FString & key, const FString & content, FString & psw)
 {
 	ADisplayContent* pDc = Cast<ADisplayContent>(UGlobalValueContainer::FindGlobeActor(TEXT("ContentTask")));
@@ -133,6 +143,20 @@ void WidgetLogicLogin::StandaloneGameMode()
 		return;
 	UTrainGameInstance::Instance->SetOfflineMode();
 	//showmessagesimple.
+
+	TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(UserWidget, WidgetLogicSimpleMessage::BlueprintClassPath);
+	UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+	if (pUserWidget)
+	{
+		WidgetLogicSimpleMessage* pLogic = static_cast<WidgetLogicSimpleMessage*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+		if (pLogic)
+		{
+			pLogic->SetWidgetCaller(UserWidget);
+			pLogic->SetTitle(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.login.standalone.title")));
+			pLogic->SetContent(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.login.standalone.content")));
+			pLogic->SetStyle(true, true);
+		}
+	}
 }
 
 void WidgetLogicLogin::OnConstruct()
@@ -171,6 +195,11 @@ void WidgetLogicLogin::OnButtonClick(const FString ObjectName)
 	{
 		UTrainGameInstance::Instance->ServerInit(GetServerAddr());
 		UTrainGameInstance::Instance->Handshake();
+	}
+	else if (ObjectName.Equals(TEXT("ok"), ESearchCase::IgnoreCase))
+	{
+		//navigate to the main widget.
+		EnterMainMenu();
 	}
 }
 

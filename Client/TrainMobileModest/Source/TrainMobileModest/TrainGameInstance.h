@@ -3,15 +3,31 @@
 #pragma once
 
 #include "Engine/GameInstance.h"
+#include "TrainOnlineInterface.h"
 #include "GameUtilityBlueprintStruct.h"
 #include "TrainGameInstance.generated.h"
 /**
  * 
  */
 UCLASS()
-class TRAINMOBILEMODEST_API UTrainGameInstance : public UGameInstance
+class TRAINMOBILEMODEST_API UTrainGameInstance 
+	: public UGameInstance
+	, public FTrainOnlineInterface
 {
 	GENERATED_BODY()
+
+public:
+	//TrainOnlineInterface
+	virtual void NotifyHttpRequestErr(const FString& msg);
+	virtual void NotifyLoginResponse(LoginStatus ls);
+	virtual void NotifyUserRankDataReady();
+	virtual void NotifyUserIDExistVerify(const FString& id, bool exist);
+	virtual void NotifyHandshake(const FString& msg, bool shake);
+	virtual void NotifyRegisterResponse(bool success);
+	virtual void NotifyUpdateUserExp();
+	virtual void NotifyRespondUserCommand(const FString& cmd, bool exist);
+	virtual void NotifyUserRankDataUploaded();
+
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")

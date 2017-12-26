@@ -8,6 +8,7 @@
 
 #include "TrainOnline.h"
 #include "TrainOnlineActor.h"
+#include "TrainOnlineInterface.h"
 #include "TrainOnlinePluginLog.h"
 
 // You should place include statements to your module's private header files here.  You only need to

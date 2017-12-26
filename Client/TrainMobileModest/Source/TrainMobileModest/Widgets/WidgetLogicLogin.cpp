@@ -64,6 +64,13 @@ void WidgetLogicLogin::ShowLogining(bool bShow)
 		pWidget->SetVisibility(bShow?ESlateVisibility::Visible:ESlateVisibility::Hidden);
 }
 
+void WidgetLogicLogin::EnableLoginButton(bool bEnable)
+{
+	UButton* pButton = Cast<UButton>(UserWidget->GetWidgetFromName(TEXT("login")));
+	if (pButton)
+		pButton->SetIsEnabled(bEnable);
+}
+
 void WidgetLogicLogin::SaveServerAddr()
 {
 	if (nullptr == UTrainGameInstance::Instance || nullptr == UserWidget)
@@ -179,7 +186,8 @@ void WidgetLogicLogin::OnButtonClick(const FString ObjectName)
 		return;
 	if (ObjectName.Equals(TEXT("login"), ESearchCase::IgnoreCase))
 	{
-		ShowLogining(false);
+		ShowLogining(true);
+		EnableLoginButton(false);
 		SaveServerAddr();
 		if (GetUserID().Equals(TEXT("su"), ESearchCase::IgnoreCase))
 		{

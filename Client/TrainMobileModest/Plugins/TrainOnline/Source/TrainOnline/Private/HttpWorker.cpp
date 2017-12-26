@@ -17,9 +17,9 @@ void FHttpWorker::InitHttpServerAddr(const FString & addr)
 	HttpServerAddress = addr;
 }
 
-void FHttpWorker::VisitUrl(const FString & url)
+void FHttpWorker::VisitUrl(const FString & url, FTrainOnlineInterface* pInterface)
 {
-	if (nullptr == ATrainOnlineActor::GetHandler())
+	if (nullptr == pInterface)
 		return;
 	//we need to url encode for special characters (especially other languages)
 	FString UrlEncodedString = HttpServerAddress + FPlatformHttp::UrlEncode(url);
@@ -27,6 +27,6 @@ void FHttpWorker::VisitUrl(const FString & url)
 	HttpRequest->SetHeader(TEXT("Content-Type"), TEXT("text/plain; charset=utf-8"));
 	HttpRequest->SetURL(UrlEncodedString);
 	HttpRequest->SetVerb(TEXT("GET"));
-	HttpRequest->OnProcessRequestComplete().BindUObject(ATrainOnlineActor::GetHandler(), &ATrainOnlineActor::HttpCompleteCallback);
+	HttpRequest->OnProcessRequestComplete().BindUObject(pInterface->GetHttpFunctionHolder(), &UHttpCompleteFunctionHolder::HttpCompleteCallback);
 	HttpRequest->ProcessRequest();
 }

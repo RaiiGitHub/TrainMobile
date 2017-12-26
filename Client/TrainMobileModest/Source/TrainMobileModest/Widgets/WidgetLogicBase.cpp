@@ -5,12 +5,12 @@
 
 void WidgetLogicBase::SetName(const FString & name)
 {
-	WidgetName = name;
+	Name = name;
 }
 
 FString WidgetLogicBase::GetName()
 {
-	return WidgetName;
+	return Name;
 }
 
 void WidgetLogicBase::SetUserWidget(UUserWidget * widget)

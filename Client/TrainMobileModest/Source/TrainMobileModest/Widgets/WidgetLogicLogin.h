@@ -9,10 +9,9 @@ public:
 	WidgetLogicLogin();
 	~WidgetLogicLogin();
 protected:
-	void ReadServerAddr();
-	void ReadUserLoginInfo();
-	void ShowLogining(bool bShow);
-	void SaveServerAddr();
+	void    ReadServerAddr();
+	void    ReadUserLoginInfo();
+	void    SaveServerAddr();
 	FString GetUserID();
 	FString GetUserPsw();
 	FString GetServerAddr();
@@ -20,6 +19,9 @@ protected:
 	void    EnterMainMenu();
 	bool    PasswordMode(const FString& key, const FString& content,FString& psw);
 	void    StandaloneGameMode();
+public:
+	void    ShowLogining(bool bShow);
+	void    EnableLoginButton(bool bEnable);
 public:
 	DECLARE_GETBLUEPRINTCLASSPATH(WidgetLogicLogin);
 	virtual void OnButtonClick(const FString ObjectName) override;

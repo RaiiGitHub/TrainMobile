@@ -11,6 +11,7 @@ public class TrainMobileModest : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+        PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Widgets"));
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Tool"));
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Fx"));
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "../../Plugins/LuaProvider/Source/LuaProvider/Lua/Include"));

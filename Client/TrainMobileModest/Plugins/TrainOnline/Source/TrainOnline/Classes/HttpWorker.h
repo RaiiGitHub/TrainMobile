@@ -1,5 +1,7 @@
 #pragma once
 
+class FTrainOnlineInterface;
+
 class TRAINONLINE_API FHttpWorker
 {
 public:
@@ -7,7 +9,7 @@ public:
 	~FHttpWorker();
 public:
 	void InitHttpServerAddr(const FString& addr);
-	void VisitUrl(const FString& url);//will connect to server address.
+	void VisitUrl(const FString& url, FTrainOnlineInterface* pInterface);//will connect to server address.
 public:
 	FString HttpServerAddress;
 };

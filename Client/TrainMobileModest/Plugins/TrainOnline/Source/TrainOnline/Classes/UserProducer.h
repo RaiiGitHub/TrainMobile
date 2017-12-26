@@ -27,13 +27,14 @@ public:
 	TMap<FString, FString> other_field_value_;
 };
 
+class FTrainOnlineInterface;
 class TRAINONLINE_API FUserProducer
 {
 public:
 	FUserProducer();
 	~FUserProducer();
 public:
-	void Init(const FString& server_addr);
+	void Init(const FString& server_addr, FTrainOnlineInterface* pInterface);
 	void AcceptLogin(const SUser& u);
 	bool PendingLogin(const FString& id, const FString& psw);
 	bool PendingAcceptDetailInfo(const FString& id);
@@ -51,5 +52,6 @@ public:
 protected:
 	TSharedPtr<FHttpWorker> HttpWorker;
 	TSharedPtr<SUser> ClientUser;
+	FTrainOnlineInterface* TrainOnlineInterface;
 };
 

@@ -25,10 +25,11 @@ public:
 
 protected:
 	class UUserWidget* UserWidget;
-	FString WidgetName;
+	FString Name;
 };
 typedef TSharedPtr<WidgetLogicBase> WidgetLogicPtr;
 typedef TArray<WidgetLogicPtr> WidgetLogicArray;
+
 #define DECLARE_GETBLUEPRINTCLASSPATH(T) static FString BlueprintClassPath; virtual FString GetBlueprintClassPath() override { return T::BlueprintClassPath;}
 #define IMPL_GETBLUEPRINTCLASSPATH(T,P) FString T::BlueprintClassPath = TEXT(#P);
 
@@ -90,4 +91,4 @@ public:
 	}
 };
 
-#define WIDGET_LOGIC_FACTORY_REG(T) static WidgetLogicFactoryAutoRegister<T> WLFAR_##T##(TEXT(#T))
+#define WIDGET_LOGIC_FACTORY_REG(T) static WidgetLogicFactoryAutoRegister<T> WLFAR##T(TEXT(#T))

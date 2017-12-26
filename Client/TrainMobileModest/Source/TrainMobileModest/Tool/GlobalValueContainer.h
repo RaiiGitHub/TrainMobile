@@ -50,6 +50,9 @@ public:
 	static void RemoveWidgetFromViewport(UUserWidget* widget);
 
 	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
+	static UUserWidget* GetWidgetFromViewport(const FString& logicName);
+
+	UFUNCTION(BlueprintCallable, Category = "CPP2BP")
 	static void RemoveAllWidgetsFromViewport();
 
 };

@@ -125,7 +125,7 @@ private:
 public:
 	//login page
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "DispatchNotify")
-	bool NotifyLoginMsg(ELoginStatus ls);
+	bool NotifyLoginResponse(ELoginStatus ls);
 
 	//register page
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "DispatchNotify")

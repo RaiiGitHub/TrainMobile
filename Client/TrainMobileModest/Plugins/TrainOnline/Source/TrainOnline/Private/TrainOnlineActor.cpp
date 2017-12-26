@@ -157,7 +157,7 @@ void ATrainOnlineActor::HttpCompleteCallback(FHttpRequestPtr Request, FHttpRespo
 				if( !rc )
 					u.logining_ = false;
 				if (Handler)
-					Handler->NotifyLoginMsg(rc?LS_PERMISSION_SUCCESS: LS_PERMISSION_FAILED);//to blueprint.
+					Handler->NotifyLoginResponse(rc?LS_PERMISSION_SUCCESS: LS_PERMISSION_FAILED);//to blueprint.
 				if (rc)
 				{
 					//read user-detail
@@ -211,7 +211,7 @@ void ATrainOnlineActor::HttpCompleteCallback(FHttpRequestPtr Request, FHttpRespo
 						}
 						//notify blueprint
 						if (Handler)
-							Handler->NotifyLoginMsg(LS_PERMISSION_TOTAL);
+							Handler->NotifyLoginResponse(LS_PERMISSION_TOTAL);
 					}
 				}
 			}

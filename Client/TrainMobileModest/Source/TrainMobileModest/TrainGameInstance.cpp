@@ -8,7 +8,14 @@
 #include "LuaProvider.h"
 #include "sprotodef.h"
 #include "HumanCharacter.h"
+
 #include "GlobalValueContainer.h"
+#include "Blueprint/UserWidget.h"
+#include "Widgets/WidgetLogicSimpleMessage.h"
+#include "Widgets/WidgetLogicLogin.h"
+#include "Widgets/WidgetLogicMainMenu.h"
+#include "Widgets/UserWidgetWrapper.h"
+
 #include "Runtime/WebBrowser/Public/IWebBrowserSingleton.h"
 #include "Runtime/WebBrowser/Public/WebBrowserModule.h"
 #include "Runtime/WebBrowser/Public/IWebBrowserCookieManager.h"
@@ -21,6 +28,105 @@ static TMap<EMemberStage, FString> MEMBER_STAGE_REVERSE;
 static TMap<FString, ELobbyStage> LSM;
 static FString LobbyFinishMark(TEXT("lobby:role_select_finished"));
 static int MatchJoinTries = 0;
+
+////////interface of trainonline begin////////////
+void UTrainGameInstance::NotifyHttpRequestErr(const FString& msg)
+{
+	//pop errors
+	TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicSimpleMessage::BlueprintClassPath);
+	UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+	if (pUserWidget)
+	{
+		WidgetLogicSimpleMessage* pLogic = static_cast<WidgetLogicSimpleMessage*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+		if (pLogic)
+		{
+			pLogic->SetWidgetCaller(nullptr);
+			pLogic->SetTitle(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.http.error.title")));
+			pLogic->SetContent(msg);
+			pLogic->SetStyle(true,false);
+		}
+	}
+}
+
+void UTrainGameInstance::NotifyLoginResponse(LoginStatus ls)
+{
+	if (ls == LoginStatus::LSP_FAILED)
+	{
+		//pop errors
+		TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicSimpleMessage::BlueprintClassPath);
+		UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+		if (pUserWidget)
+		{
+			WidgetLogicSimpleMessage* pLogic = static_cast<WidgetLogicSimpleMessage*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				pLogic->SetWidgetCaller(nullptr);
+				pLogic->SetTitle(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.login.response.title")));
+				pLogic->SetContent(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.login.response.failed.content")));
+				pLogic->SetStyle(true, false);
+			}
+		}
+		UUserWidget* pLoginWidget = UGlobalValueContainer::GetWidgetFromViewport(TEXT("WidgetLogicLogin"));
+		if (pLoginWidget)
+		{
+			WidgetLogicLogin* pLogic = static_cast<WidgetLogicLogin*>(Cast<UUserWidgetWrapper>(pLoginWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				pLogic->EnableLoginButton(true);
+				pLogic->ShowLogining(false);
+			}
+		}
+	}
+	else if( ls == LoginStatus::LSP_TOTAL )
+	{
+		//success, pop main menu and verify edition.
+		UGlobalValueContainer::RemoveAllWidgetsFromViewport();
+		TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicMainMenu::BlueprintClassPath);
+		UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+		if (pUserWidget)
+		{
+			VersionVerify();
+		}
+	}
+}
+
+void UTrainGameInstance::NotifyUserRankDataReady()
+{
+
+}
+
+void UTrainGameInstance::NotifyUserIDExistVerify(const FString& id, bool exist)
+{
+
+}
+
+void UTrainGameInstance::NotifyHandshake(const FString& msg, bool shake)
+{
+
+}
+
+void UTrainGameInstance::NotifyRegisterResponse(bool success)
+{
+
+}
+
+void UTrainGameInstance::NotifyUpdateUserExp()
+{
+
+}
+
+void UTrainGameInstance::NotifyRespondUserCommand(const FString& cmd, bool exist)
+{
+
+}
+
+void UTrainGameInstance::NotifyUserRankDataUploaded()
+{
+
+}
+////////interface of trainonline end////////////
+
+
 
 void UTrainGameInstance::SetTrainMode(ETrainMode tm)
 {
@@ -122,7 +228,8 @@ bool UTrainGameInstance::ServerInit(const FString & addr)
 	TSharedPtr<FSocketProducer>&& sp = GetSocketProducer();
 	if (up.Get())
 	{
-		up->Init(addr);
+		SetupHttpFunction(this);
+		up->Init(addr,this);
 		return true;
 	}
 	return false;	

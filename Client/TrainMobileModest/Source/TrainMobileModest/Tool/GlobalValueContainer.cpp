@@ -4,6 +4,8 @@
 #include "GlobalValueContainer.h"
 #include "Engine/DataTable.h"
 #include "TaskData.h"
+#include "Widgets/WidgetLogicBase.h"
+#include "Widgets/UserWidgetWrapper.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "Runtime/UMG/Public/UMGStyle.h"
 #include "Runtime/UMG/Public/Slate/SObjectWidget.h"
@@ -113,6 +115,17 @@ void UGlobalValueContainer::RemoveWidgetFromViewport(UUserWidget * widget)
 		UserWidgets.Remove(widget);
 		widget->RemoveFromViewport();
 	}
+}
+
+UUserWidget* UGlobalValueContainer::GetWidgetFromViewport(const FString & logicName)
+{
+	for (auto& w : UserWidgets)
+	{
+		WidgetLogicBase* pLogic = Cast<UUserWidgetWrapper>(w)->GetWidgetLogic();
+		if (pLogic && pLogic->GetName().Equals(logicName, ESearchCase::IgnoreCase))
+			return w;//return the first one(if there were multi userwidgets with the same logic-name )
+	}
+	return nullptr;
 }
 
 void UGlobalValueContainer::RemoveAllWidgetsFromViewport()

@@ -5,7 +5,6 @@
 #include "GlobalValueContainer.h"
 #include "WidgetLogicSimpleMessage.h"
 #include "UserWidgetWrapper.h"
-#include "DisplayContent.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "Runtime/UMG/Public/UMGStyle.h"
 #include "Runtime/UMG/Public/Slate/SObjectWidget.h"
@@ -49,9 +48,8 @@ void WidgetLogicLogin::ReadUserLoginInfo()
 	}
 	FString client_psw = UTrainGameInstance::Instance->ReadConfig(TEXT("Network.Client"), TEXT("Password"));
 	{
-		FString psw;
-		if (PasswordMode(TEXT("login_password"), client_psw, psw))
-			SetUserPsw(psw);
+		if (UGlobalValueContainer::AddPswContent(TEXT("login_password"), client_psw))
+			SetUserPsw(UGlobalValueContainer::GetPswContent(TEXT("login_password"),true));
 	}
 }
 
@@ -93,10 +91,7 @@ FString WidgetLogicLogin::GetUserID()
 
 FString WidgetLogicLogin::GetUserPsw()
 {
-	ADisplayContent* pDc = Cast<ADisplayContent>(UGlobalValueContainer::FindGlobeActor(TEXT("ContentTask")));
-	if (pDc)
-		return pDc->GetPswContent(TEXT("login_password"), false);
-	return FString();
+	return UGlobalValueContainer::GetPswContent(TEXT("login_password"), false);
 }
 
 FString WidgetLogicLogin::GetServerAddr()
@@ -108,11 +103,19 @@ FString WidgetLogicLogin::GetServerAddr()
 		if (server_addr.IsEmpty()
 			|| server_addr.Equals(UGlobalValueContainer::GetSystemValue(TEXT("DefaultServerAddr"))))
 		{
-			return TEXT("http://www.resafety.com/mobile/");
+			//return TEXT("http://www.resafety.com/mobile/");
+			return TEXT("http://127.0.0.1:8194/");
 		}
 		return server_addr;
 	}
 	return FString();
+}
+
+void WidgetLogicLogin::SetUserID(const FString & id)
+{
+	UEditableTextBox* pText = Cast<UEditableTextBox>(UserWidget->GetWidgetFromName(TEXT("tb_account")));
+	if (pText)
+		pText->SetText(FText::FromString(id));
 }
 
 void WidgetLogicLogin::SetUserPsw(const FString & psw)
@@ -128,20 +131,6 @@ void WidgetLogicLogin::EnterMainMenu()
 		return;
 	UGlobalValueContainer::RemoveWidgetFromViewport(UserWidget);
 	//create mainmenu widget.
-}
-
-bool WidgetLogicLogin::PasswordMode(const FString & key, const FString & content, FString & psw)
-{
-	ADisplayContent* pDc = Cast<ADisplayContent>(UGlobalValueContainer::FindGlobeActor(TEXT("ContentTask")));
-	if (pDc)
-	{
-		if (pDc->AddPswContent(key, content))
-		{
-			psw = pDc->GetPswContent(key,true);
-			return true;
-		}
-	}
-	return false;
 }
 
 void WidgetLogicLogin::StandaloneGameMode()
@@ -175,9 +164,7 @@ void WidgetLogicLogin::OnConstruct()
 
 void WidgetLogicLogin::OnDestruct()
 {
-	ADisplayContent* pDc = Cast<ADisplayContent>(UGlobalValueContainer::FindGlobeActor(TEXT("ContentTask")));
-	if (pDc)
-		pDc->RemovePswContent(TEXT("login_password"));
+	UGlobalValueContainer::RemovePswContent(TEXT("login_password"));
 }
 
 void WidgetLogicLogin::OnButtonClick(const FString ObjectName)
@@ -201,6 +188,8 @@ void WidgetLogicLogin::OnButtonClick(const FString ObjectName)
 	}
 	else if (ObjectName.Equals(TEXT("register"), ESearchCase::IgnoreCase))
 	{
+		ShowLogining(true);
+		EnableLoginButton(false);
 		UTrainGameInstance::Instance->ServerInit(GetServerAddr());
 		UTrainGameInstance::Instance->Handshake();
 	}
@@ -215,9 +204,8 @@ void WidgetLogicLogin::OnTextChanged(const FString ObjectName, const FText Text)
 {
 	if (ObjectName.Equals(TEXT("tb_psw"), ESearchCase::IgnoreCase))
 	{
-		FString psw;
-		if (PasswordMode(TEXT("login_password"), Text.ToString(), psw))
-			SetUserPsw(psw);
+		if (UGlobalValueContainer::AddPswContent(TEXT("login_password"), Text.ToString()))
+			SetUserPsw(UGlobalValueContainer::GetPswContent(TEXT("login_password"),true));
 	}
 }
 

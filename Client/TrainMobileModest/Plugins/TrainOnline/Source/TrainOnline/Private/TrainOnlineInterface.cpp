@@ -3,6 +3,22 @@
 #include "TrainOnlineInterface.h"
 #include "HttpCompleteFunctionHolder.h"
 
+void FTrainOnlineInterface::PutKeyValInPendingUser(const FString & key, const FString & val)
+{
+	TSharedPtr<SUser>& u = GetUserProducer()->GetClientUser();
+	if (u.Get())
+	{
+		if (0 == key.Compare(TEXT("psw"), ESearchCase::IgnoreCase))
+			u->psw_ = val;
+		else if (0 == key.Compare(TEXT("id"), ESearchCase::IgnoreCase))
+			u->id_ = val;
+		else if (0 == key.Compare(TEXT("name"), ESearchCase::IgnoreCase))
+			u->name_ = val;
+		else
+			u->other_field_value_.Add(key, val);
+	}
+}
+
 void FTrainOnlineInterface::SetupHttpFunction(UObject* outer)
 {
 	if (nullptr == HttpFunction)

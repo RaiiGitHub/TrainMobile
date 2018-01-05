@@ -14,6 +14,7 @@
 
 TMap<FString,AActor*>             UGlobalValueContainer::GlobeActors;
 TMap<FString,FString>             UGlobalValueContainer::SystemKeyValues;
+TMap<FString, FString>             UGlobalValueContainer::MapPswContent;
 TArray<AActor*>                   UGlobalValueContainer::MiniMapActors;
 FDateTime                         UGlobalValueContainer::GameBeginTime;
 TArray<UUserWidget*>              UGlobalValueContainer::UserWidgets;
@@ -134,3 +135,108 @@ void UGlobalValueContainer::RemoveAllWidgetsFromViewport()
 		w->RemoveFromViewport();
 }
 
+bool UGlobalValueContainer::AddPswContent(const FString & key, const FString & psw)
+{
+	bool add_ok = false;
+	FString* str = MapPswContent.Find(key);
+	if (nullptr == str)
+	{
+		MapPswContent.Add(key, psw);
+		add_ok = true;
+	}
+	else
+	{
+		add_ok = false;
+		const int len = psw.Len();
+		int pre_len = str->Len();
+		for (int i = 0; i < pre_len - len; ++i)
+			str->RemoveAt(str->Len() - 1);
+		pre_len = str->Len();
+		for (int i = 0; i < len; ++i)
+		{
+			const FString c = psw.Mid(i, 1);
+			if (!c.Equals("*"))
+			{
+				add_ok = true;
+				if (i < pre_len)
+				{
+					str->RemoveAt(i);
+					str->InsertAt(i, c);
+				}
+				else
+					str->Append(c);
+			}
+		}
+	}
+	return add_ok;
+}
+
+int UGlobalValueContainer::RemovePswContent(const FString & key)
+{
+	return MapPswContent.Remove(key);
+}
+
+void UGlobalValueContainer::ClearPswContent(const FString & key)
+{
+	MapPswContent.Empty();
+}
+
+FString UGlobalValueContainer::GetPswContent(const FString& key, bool encrypt)
+{
+	FString content;
+	const FString* str = MapPswContent.Find(key);
+	if (nullptr == str)
+		return content;
+	if (encrypt)
+	{
+		int len = str->Len();
+		for (int i = 0; i < len; ++i)
+			content.Append("*");
+	}
+	else
+		content = *str;
+	return content;
+}
+
+void UGlobalValueContainer::AutoWrapText(FString& out_format, int32& out_height, int32& out_width, const FString & origin, const float line_maxwidth, const FSlateFontInfo& fi)
+{
+	if (!fi.HasValidFont()
+		|| origin.IsEmpty()
+		|| 0 >= line_maxwidth)
+		return;
+	FString origin_no_r = origin.Replace(TEXT("\r\n"), TEXT("\n"));
+	const UFont* font = static_cast<const UFont*>(fi.FontObject);
+	out_format.Empty();
+	out_height = 0.f;
+	out_width = 0.f;
+	int content_len = origin_no_r.Len();
+	int origin_width = font->GetStringSize(*origin_no_r);
+	float cur_width = 0.f;
+	const TCHAR sep = '\n';
+	const float rate = fi.Size / 10.f;
+	for (int i = 0; i < content_len; ++i)
+	{
+		if (i > 0 && out_format.Right(1)[0] == sep && origin_no_r[i] == sep)
+			continue;
+		float char_width = 0.f;
+		float char_hegiht = 0.f;
+		font->GetCharSize(origin_no_r[i], char_width, char_hegiht);
+		cur_width += char_width * rate;
+		out_format.AppendChar(origin_no_r[i]);
+		if (0 == out_height)
+			out_height = char_hegiht * rate;
+		out_width = FMath::Max((float)out_width, cur_width);
+		if (origin_no_r[i] == sep)
+		{
+			out_height += char_hegiht * rate;
+			cur_width = 0.f;
+		}
+		else if (cur_width >= line_maxwidth && i != content_len - 1)
+		{
+			out_format.AppendChar(sep);
+			out_height += char_hegiht * rate;
+			cur_width = 0.f;
+
+		}
+	}
+}

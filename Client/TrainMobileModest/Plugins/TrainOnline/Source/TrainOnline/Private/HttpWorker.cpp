@@ -1,6 +1,7 @@
 #include "TrainOnlinePrivatePCH.h"
 #include "HttpWorker.h"
 #include "PlatformHttp.h"
+#include "HttpCompleteFunctionHolder.h"
 
 FHttpWorker::FHttpWorker()
 	:HttpServerAddress(TEXT("http://127.0.0.1:80/"))

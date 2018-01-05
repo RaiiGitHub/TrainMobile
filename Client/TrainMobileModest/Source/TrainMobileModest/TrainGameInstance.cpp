@@ -14,6 +14,7 @@
 #include "Widgets/WidgetLogicSimpleMessage.h"
 #include "Widgets/WidgetLogicLogin.h"
 #include "Widgets/WidgetLogicMainMenu.h"
+#include "Widgets/WidgetLogicRegister.h"
 #include "Widgets/UserWidgetWrapper.h"
 
 #include "Runtime/WebBrowser/Public/IWebBrowserSingleton.h"
@@ -97,17 +98,126 @@ void UTrainGameInstance::NotifyUserRankDataReady()
 
 void UTrainGameInstance::NotifyUserIDExistVerify(const FString& id, bool exist)
 {
-
+	if (exist)
+	{
+		//invalid user_id
+		TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicSimpleMessage::BlueprintClassPath);
+		UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+		if (pUserWidget)
+		{
+			WidgetLogicSimpleMessage* pLogic = static_cast<WidgetLogicSimpleMessage*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				pLogic->SetWidgetCaller(nullptr);
+				pLogic->SetTitle(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.register.step1.title")));
+				pLogic->SetContent(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.register.userid.exist.content")) + id);
+				pLogic->SetStyle(true, false);
+			}
+		}
+	}
+	else
+	{
+		//userregister widget. goto next page.
+		UUserWidgetWrapper* pLoginWidget = Cast<UUserWidgetWrapper>(UGlobalValueContainer::GetWidgetFromViewport(TEXT("WidgetLogicRegister")));
+		if (pLoginWidget)
+		{
+			WidgetLogicRegister* pLogic = static_cast<WidgetLogicRegister*>(pLoginWidget->GetWidgetLogic());
+			if (pLogic)
+				pLogic->GotoNextStep();
+		}
+	}
 }
 
 void UTrainGameInstance::NotifyHandshake(const FString& msg, bool shake)
 {
+	if (shake)
+	{
+		//ready to open userregister widget.
+		TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicRegister::BlueprintClassPath);
+		UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+		if (pUserWidget)
+		{
+			WidgetLogicRegister* pLogic = static_cast<WidgetLogicRegister*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				//
+			}
+		}
+		UUserWidget* pLoginWidget = UGlobalValueContainer::GetWidgetFromViewport(TEXT("WidgetLogicLogin"));
+		UGlobalValueContainer::RemoveWidgetFromViewport(pLoginWidget);
+	}
+	else
+	{
+		//failed to connect.
+		//pop errors
+		TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicSimpleMessage::BlueprintClassPath);
+		UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+		if (pUserWidget)
+		{
+			WidgetLogicSimpleMessage* pLogic = static_cast<WidgetLogicSimpleMessage*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				pLogic->SetWidgetCaller(nullptr);
+				pLogic->SetTitle(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.login.register.response.title")));
+				pLogic->SetContent(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.login.register.response.failed.content")));
+				pLogic->SetStyle(true, false);
+			}
+		}
 
+		UUserWidget* pLoginWidget = UGlobalValueContainer::GetWidgetFromViewport(TEXT("WidgetLogicLogin"));
+		if (pLoginWidget)
+		{
+			WidgetLogicLogin* pLogic = static_cast<WidgetLogicLogin*>(Cast<UUserWidgetWrapper>(pLoginWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				pLogic->EnableLoginButton(true);
+				pLogic->ShowLogining(false);
+			}
+		}
+	}
 }
 
 void UTrainGameInstance::NotifyRegisterResponse(bool success)
 {
+	if (success)
+	{
+		//register done.
+		//ready to open userlogin widget.
+		{
+			TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicLogin::BlueprintClassPath);
+			UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+			if (pUserWidget)
+			{
+				WidgetLogicLogin* pLogic = static_cast<WidgetLogicLogin*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+				if (pLogic)
+				{
+					const TSharedPtr<SUser>& u = GetUserProducer()->GetClientUser();
+					pLogic->SetUserID(u->id_);
+					if (UGlobalValueContainer::AddPswContent(TEXT("login_password"), u->psw_))
+						pLogic->SetUserPsw(UGlobalValueContainer::GetPswContent(TEXT("login_password"), true));
+				}
+			}
+			UUserWidget* pRegisterWidget = UGlobalValueContainer::GetWidgetFromViewport(TEXT("WidgetLogicRegister"));
+			UGlobalValueContainer::RemoveWidgetFromViewport(pRegisterWidget);
+		}
 
+		//tips
+		{
+			TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicSimpleMessage::BlueprintClassPath);
+			UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
+			if (pUserWidget)
+			{
+				WidgetLogicSimpleMessage* pLogic = static_cast<WidgetLogicSimpleMessage*>(Cast<UUserWidgetWrapper>(pUserWidget)->GetWidgetLogic());
+				if (pLogic)
+				{
+					pLogic->SetWidgetCaller(nullptr);
+					pLogic->SetTitle(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.register.success.response.title")));
+					pLogic->SetContent(UGlobalValueContainer::GetSystemValue(TEXT("msg.simple.register.success.response.content")));
+					pLogic->SetStyle(true, false);
+				}
+			}
+		}
+	}
 }
 
 void UTrainGameInstance::NotifyUpdateUserExp()
@@ -225,7 +335,6 @@ bool UTrainGameInstance::WriteConfig(const FString & section, const FString & fi
 bool UTrainGameInstance::ServerInit(const FString & addr)
 {
 	TSharedPtr<FUserProducer>&& up = GetUserProducer();
-	TSharedPtr<FSocketProducer>&& sp = GetSocketProducer();
 	if (up.Get())
 	{
 		SetupHttpFunction(this);

@@ -15,11 +15,11 @@ protected:
 	FString GetUserID();
 	FString GetUserPsw();
 	FString GetServerAddr();
-	void    SetUserPsw(const FString& psw);
 	void    EnterMainMenu();
-	bool    PasswordMode(const FString& key, const FString& content,FString& psw);
 	void    StandaloneGameMode();
 public:
+	void    SetUserID(const FString& id);
+	void    SetUserPsw(const FString& psw);
 	void    ShowLogining(bool bShow);
 	void    EnableLoginButton(bool bEnable);
 public:

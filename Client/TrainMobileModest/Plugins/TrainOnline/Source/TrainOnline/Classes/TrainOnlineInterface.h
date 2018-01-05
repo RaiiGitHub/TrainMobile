@@ -14,6 +14,7 @@ public:
 		LSP_TOTAL
 	};
 public:
+	void PutKeyValInPendingUser(const FString& key, const FString& val);
 	void SetupHttpFunction(UObject* outer);
 	void PutInHttpMethodDesc(const FString& desc);
 	FString PopOutHttpMethodDesc(bool pop = true);
@@ -28,6 +29,7 @@ protected:
 	virtual void NotifyUpdateUserExp() {}
 	virtual void NotifyRespondUserCommand(const FString& cmd, bool exist) {}
 	virtual void NotifyUserRankDataUploaded() {}
+
 private:
 	TQueue<FString> HttpMethodQueue;
 	UHttpCompleteFunctionHolder* HttpFunction;

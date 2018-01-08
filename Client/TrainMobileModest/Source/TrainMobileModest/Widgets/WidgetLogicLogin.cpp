@@ -4,6 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "GlobalValueContainer.h"
 #include "WidgetLogicSimpleMessage.h"
+#include "WidgetLogicMainMenu.h"
 #include "UserWidgetWrapper.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "Runtime/UMG/Public/UMGStyle.h"
@@ -131,6 +132,8 @@ void WidgetLogicLogin::EnterMainMenu()
 		return;
 	UGlobalValueContainer::RemoveWidgetFromViewport(UserWidget);
 	//create mainmenu widget.
+	TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(UserWidget, WidgetLogicMainMenu::BlueprintClassPath);
+	UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
 }
 
 void WidgetLogicLogin::StandaloneGameMode()

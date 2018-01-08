@@ -81,12 +81,15 @@ void UTrainGameInstance::NotifyLoginResponse(LoginStatus ls)
 	else if( ls == LoginStatus::LSP_TOTAL )
 	{
 		//success, pop main menu and verify edition.
-		UGlobalValueContainer::RemoveAllWidgetsFromViewport();
-		TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(this, WidgetLogicMainMenu::BlueprintClassPath);
-		UUserWidget* pUserWidget = UGlobalValueContainer::CreateUserWidget(WidgetClass);
-		if (pUserWidget)
+		UUserWidget* pLoginWidget = UGlobalValueContainer::GetWidgetFromViewport(TEXT("WidgetLogicLogin"));
+		if (pLoginWidget)
 		{
-			VersionVerify();
+			WidgetLogicLogin* pLogic = static_cast<WidgetLogicLogin*>(Cast<UUserWidgetWrapper>(pLoginWidget)->GetWidgetLogic());
+			if (pLogic)
+			{
+				pLogic->EnterMainMenu();
+				VersionVerify();
+			}
 		}
 	}
 }

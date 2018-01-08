@@ -35,6 +35,7 @@ public:
 	~FUserProducer();
 public:
 	void Init(const FString& server_addr, FTrainOnlineInterface* pInterface);
+	bool IsInit();
 	void AcceptLogin(const SUser& u);
 	bool PendingLogin(const FString& id, const FString& psw);
 	bool PendingAcceptDetailInfo(const FString& id);

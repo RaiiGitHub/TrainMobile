@@ -23,6 +23,11 @@ void FUserProducer::Init(const FString & server_addr, FTrainOnlineInterface* pIn
 	PendingGetVersion();
 }
 
+bool FUserProducer::IsInit()
+{
+	return nullptr != HttpWorker.Get();
+}
+
 void FUserProducer::AcceptLogin(const SUser & u)
 {
 	check(ClientUser.Get());

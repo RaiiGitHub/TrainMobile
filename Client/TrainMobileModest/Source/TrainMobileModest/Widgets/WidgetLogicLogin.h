@@ -15,13 +15,13 @@ protected:
 	FString GetUserID();
 	FString GetUserPsw();
 	FString GetServerAddr();
-	void    EnterMainMenu();
 	void    StandaloneGameMode();
 public:
 	void    SetUserID(const FString& id);
 	void    SetUserPsw(const FString& psw);
 	void    ShowLogining(bool bShow);
 	void    EnableLoginButton(bool bEnable);
+	void    EnterMainMenu();
 public:
 	DECLARE_GETBLUEPRINTCLASSPATH(WidgetLogicLogin);
 	virtual void OnButtonClick(const FString ObjectName) override;

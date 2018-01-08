@@ -32,7 +32,6 @@ public:
 
 public:
 	class WidgetLogicBase* GetWidgetLogic();
-
 protected:
 	TSharedPtr<class WidgetLogicBase> WidgetLogicHandler;
 };

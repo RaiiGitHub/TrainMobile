@@ -16,7 +16,7 @@ void UHttpCompleteFunctionHolder::HttpCompleteCallback(FHttpRequestPtr Request, 
 		if (method_desc.Equals(TEXT("user_login")))
 			u.logining_ = false;
 
-		LogicHolder->NotifyHttpRequestErr(FString::Printf(TEXT("%s-Error: Unable to process HTTP Request!"), *method_desc));
+		LogicHolder->NotifyHttpRequestErr(FString::Printf(TEXT("%s-Error: Unable to process HTTP Request!"), *method_desc), method_desc);
 		return;
 	}
 	else if (EHttpResponseCodes::IsOk(Response->GetResponseCode()))
@@ -29,7 +29,7 @@ void UHttpCompleteFunctionHolder::HttpCompleteCallback(FHttpRequestPtr Request, 
 		if (method_desc.Equals(TEXT("user_login")))
 			u.logining_ = false;
 			
-		LogicHolder->NotifyHttpRequestErr(FString::Printf(TEXT("%s-Error: method not support."), *method_desc));//to blueprint.
+		LogicHolder->NotifyHttpRequestErr(FString::Printf(TEXT("%s-Error: method not support."), *method_desc), method_desc);
 		return;
 	}
 

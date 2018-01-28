@@ -18,7 +18,7 @@ class TRAINMOBILEMODEST_API UTrainGameInstance
 
 public:
 	//TrainOnlineInterface
-	virtual void NotifyHttpRequestErr(const FString& msg);
+	virtual void NotifyHttpRequestErr(const FString& msg, const FString& from_msg_type);
 	virtual void NotifyLoginResponse(LoginStatus ls);
 	virtual void NotifyUserRankDataReady();
 	virtual void NotifyUserIDExistVerify(const FString& id, bool exist);

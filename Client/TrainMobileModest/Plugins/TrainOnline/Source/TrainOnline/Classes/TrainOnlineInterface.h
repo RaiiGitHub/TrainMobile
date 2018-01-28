@@ -20,7 +20,7 @@ public:
 	FString PopOutHttpMethodDesc(bool pop = true);
 	UHttpCompleteFunctionHolder* GetHttpFunctionHolder() { return HttpFunction; }
 protected:
-	virtual void NotifyHttpRequestErr(const FString& msg) {  }
+	virtual void NotifyHttpRequestErr(const FString& msg, const FString& from_msg_type) {  }
 	virtual void NotifyLoginResponse(LoginStatus ls) {}
 	virtual void NotifyUserRankDataReady() {}
 	virtual void NotifyUserIDExistVerify(const FString& id, bool exist) {}

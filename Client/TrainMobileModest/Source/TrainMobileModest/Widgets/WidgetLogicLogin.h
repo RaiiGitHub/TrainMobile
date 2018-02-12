@@ -12,6 +12,7 @@ protected:
 	void    ReadServerAddr();
 	void    ReadUserLoginInfo();
 	void    SaveServerAddr();
+	void    SaveUserIDPsw();
 	FString GetUserID();
 	FString GetUserPsw();
 	FString GetServerAddr();

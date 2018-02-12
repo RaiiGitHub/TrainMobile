@@ -2,18 +2,15 @@
 
 #include "WidgetLogicBase.h"
 
-class WidgetLogicMainMenu :
+class WidgetLogicVideoLearning :
 	public WidgetLogicBase
 {
 public:
-	WidgetLogicMainMenu();
-	~WidgetLogicMainMenu();
+	WidgetLogicVideoLearning();
+	~WidgetLogicVideoLearning();
 protected:
-	void UpdateUserLabel();
-	void EnterExerciseSystem();
-	void EnterVideoLearningSystem();
 public:
-	DECLARE_GETBLUEPRINTCLASSPATH(WidgetLogicMainMenu);
+	DECLARE_GETBLUEPRINTCLASSPATH(WidgetLogicVideoLearning);
 	virtual void OnButtonClick(const FString ObjectName) override;
 	virtual void OnConstruct() override;
 	virtual void OnDestruct() override;

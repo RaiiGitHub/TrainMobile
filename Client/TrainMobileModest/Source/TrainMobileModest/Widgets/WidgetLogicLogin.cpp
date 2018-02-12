@@ -82,6 +82,14 @@ void WidgetLogicLogin::SaveServerAddr()
 	}
 }
 
+void WidgetLogicLogin::SaveUserIDPsw()
+{
+	if (nullptr == UTrainGameInstance::Instance || nullptr == UserWidget)
+		return;
+	UTrainGameInstance::Instance->WriteConfig(TEXT("Network.Client"), TEXT("ID"),GetUserID());
+	UTrainGameInstance::Instance->WriteConfig(TEXT("Network.Client"), TEXT("Password"),GetUserPsw());
+}
+
 FString WidgetLogicLogin::GetUserID()
 {
 	UEditableTextBox* pText = Cast<UEditableTextBox>(UserWidget->GetWidgetFromName(TEXT("tb_account")));
@@ -130,6 +138,8 @@ void WidgetLogicLogin::EnterMainMenu()
 {
 	if (nullptr == UTrainGameInstance::Instance || nullptr == UserWidget)
 		return;
+	//save login info.
+	SaveUserIDPsw();
 	UGlobalValueContainer::RemoveWidgetFromViewport(UserWidget);
 	//create mainmenu widget.
 	TSubclassOf<UUserWidget> WidgetClass = WidgetLogicBase::CreateUserWidgetClass(UserWidget, WidgetLogicMainMenu::BlueprintClassPath);

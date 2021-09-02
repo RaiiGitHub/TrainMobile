@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "ScenePlayerController.h"
+#include "TrainMobileModest.h"
 #include "RoleFollowLabelComponent.h"
 #include "CallbackActor.h"
 #include "ActorTransformAni.h"
@@ -10,6 +10,7 @@
 #include "DisplayDebugHelpers.h"
 #include "TrainGameInstance.h"
 #include "HumanCharacter.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 static const float MovementScale = .618f;
 static const float ArmLengthBench = 280.f;
@@ -211,8 +212,8 @@ void AScenePlayerController::ZoomCamera(float Value)
 		}
 		else
 		{
-			FVector fv = GetActorForwardVector();
-			FVector uv = GetActorUpVector();
+			FVector fv = AActor::GetActorForwardVector();
+			FVector uv = AActor::GetActorUpVector();
  			PawnCam = GetPawn()->GetActorLocation();
 			FVector dir = -fv + uv;
 			PawnCamDir = dir * Value/FMath::Abs(Value);
@@ -273,7 +274,7 @@ void AScenePlayerController::LookUpAtRate(float Rate)
 			else
 			{
 				FRotator r = pawn->GetControlRotation();
-				r.Pitch += Rate * InputPitchScale;
+				r.Pitch += Rate * InputPitchScale_DEPRECATED;
 				FQuat q(r);
 				if (q.Euler().Y <= 20.f && q.Euler().Y >= -40.f)
 					pawn->AddControllerPitchInput(Rate);
@@ -500,12 +501,12 @@ void AScenePlayerController::SetNewMoveDestination(const FVector DestLocation)
 	APawn* const pawn = GetPawn();
 	if (pawn)
 	{
-		UNavigationSystem* const NavSys = GetWorld()->GetNavigationSystem();
+		//UNavigationSystem* const NavSys = Cast<UNavigationSystem>(GetWorld()->GetNavigationSystem());
 		//height should not be calculated.
 		float const Distance = FVector::Dist(FVector(FVector2D(DestLocation),0.f),
 			FVector(FVector2D(pawn->GetActorLocation()),0.f));
 		// We need to issue move command only if far enough in order for walk animation to play correctly
-		if (NavSys)
+		//if (NavSys)
 		{
 			FVector md = FVector::ZeroVector;
 			float   ml = 0.f;
@@ -517,7 +518,8 @@ void AScenePlayerController::SetNewMoveDestination(const FVector DestLocation)
 			{
 				PawnRotateYawTime = 0.f;
 				PawnRotateBeingTime = 0.f;
-				NavSys->SimpleMoveToLocation(this, DestLocation);
+				UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, DestLocation);
+				//NavSys->SimpleMoveToLocation(this, DestLocation);
 				//may block by the obstacles.
 				if (stop && BODY_MOVEMENT_ACTING == BodyMovementState )
 					ClearHitResult();
@@ -533,7 +535,7 @@ void AScenePlayerController::SetNewMoveDestination(const FVector DestLocation)
 			else
 			{
 				AStaticMeshActor* mesh = TransformAni->GetPointerMesh();
-				if (mesh && mesh->bHidden)
+				if (mesh && mesh->IsHidden())
 					NotifyHitResult();
 				ClearHitResult();
 			}	
@@ -596,7 +598,7 @@ void AScenePlayerController::CheckReachHitPointAndNotify(const FVector DestLocat
 		else
 		{
 			AStaticMeshActor* mesh = TransformAni->GetPointerMesh();
-			if (mesh && mesh->bHidden)
+			if (mesh && mesh->IsHidden())
 			{
 				NotifyHitResult();
 			}	
@@ -854,9 +856,10 @@ void AScenePlayerController::CleanHitEffect(APawn* prePawn, bool affectDir)
 	{
 		if (prePawn && prePawn->GetMovementComponent())
 			prePawn->GetMovementComponent()->Velocity = FVector::ZeroVector;
-		UNavigationSystem* const NavSys = GetWorld()->GetNavigationSystem();
-		if (NavSys)
-			NavSys->SimpleMoveToActor(this, GetPawn());
+		//UNavigationSystem* const NavSys = GetWorld()->GetNavigationSystem();
+		//if (NavSys)
+		//	NavSys->SimpleMoveToActor(this, GetPawn());
+		UAIBlueprintHelperLibrary::SimpleMoveToActor(this, GetPawn());
 	}
 }
 

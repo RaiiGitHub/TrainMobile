@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "SpecificDataPool.h"
+#include "TrainMobileModest.h"
 #include "TaskPool.h"
 #include "TaskState.h"
 #include "TaskFunction.h"

@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "TrainGameInstance.h"
+#include "TrainMobileModest.h"
 #include "TaskPool.h"
 #include "CallbackActor.h"
 #include "TrainOnline.h"

@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "TaskState.h"
+#include "TrainMobileModest.h"
 
 const RUNTIME_TASK_BASE::TaskPtr & TaskState::GetTask() const
 {

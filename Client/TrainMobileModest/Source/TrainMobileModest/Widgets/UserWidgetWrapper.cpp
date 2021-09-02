@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "UserWidgetWrapper.h"
+#include "TrainMobileModest.h"
 #include "WidgetLogicBase.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "Runtime/UMG/Public/UMGStyle.h"

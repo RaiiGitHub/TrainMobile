@@ -1,7 +1,7 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
+#include "TrainOnlineActor.h"
 #include "TrainOnlinePrivatePCH.h"
-#include "TrainOnline.h"
 
 
 ATrainOnlineActor* ATrainOnlineActor::Handler = nullptr;

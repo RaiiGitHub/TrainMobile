@@ -1,9 +1,9 @@
 // As Part of GuangZhou Training.
 
+#include "DisplayContent.h"
 #include "TrainMobileModest.h"
 #include "Engine/Canvas.h"
 #include "CanvasItem.h"
-#include "DisplayContent.h"
 
 DECLARE_LOG_CATEGORY_CLASS(RaiiLogTrack, Log, All);
 // Sets default values

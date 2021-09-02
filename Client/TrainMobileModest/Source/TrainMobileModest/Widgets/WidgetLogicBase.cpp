@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "WidgetLogicBase.h"
+#include "TrainMobileModest.h"
 
 void WidgetLogicBase::SetName(const FString & name)
 {

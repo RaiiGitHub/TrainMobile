@@ -1,5 +1,5 @@
-#include "TrainMobileModest.h"
 #include "DynamicMaterial.h"
+#include "TrainMobileModest.h"
 
 
 
@@ -102,7 +102,7 @@ bool DynamicMaterial::Begin(const FString & mesh_name, UMeshComponent * mesh, FN
 		bm.emissiveColor = color;
 		bm.active = true;
 		TArray<UTexture*> texs;
-		bm.miOrigin->GetUsedTextures(texs, EMaterialQualityLevel::Medium, true, ERHIFeatureLevel::ES2, true);
+		bm.miOrigin->GetUsedTextures(texs, EMaterialQualityLevel::Medium, true, ERHIFeatureLevel::ES3_1, true);
 		if (texs.Num() > 0)
 			bm.miReplace->SetTextureParameterValue(bm.texParamName, texs[0]);
 		BreathMeshes.AddUnique(bm);
@@ -151,7 +151,7 @@ bool DynamicMaterial::BeginWithAllElement(const FString & mesh_name, FName tex_p
 					bm.emissiveColor = color;
 					bm.active = true;
 					TArray<UTexture*> texs;
-					bm.miOrigin->GetUsedTextures(texs, EMaterialQualityLevel::Medium, true, ERHIFeatureLevel::ES2, true);
+					bm.miOrigin->GetUsedTextures(texs, EMaterialQualityLevel::Medium, true, ERHIFeatureLevel::ES3_1, true);
 					if (texs.Num() > 0)
 						bm.miReplace->SetTextureParameterValue(bm.texParamName, texs[0]);
 					BreathMeshes.AddUnique(bm);

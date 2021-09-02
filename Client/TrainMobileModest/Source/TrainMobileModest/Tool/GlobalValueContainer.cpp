@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "GlobalValueContainer.h"
+#include "TrainMobileModest.h"
 #include "Engine/DataTable.h"
 #include "TaskData.h"
 #include "Widgets/WidgetLogicBase.h"

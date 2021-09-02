@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "SceneMoviePlayer.h"
+#include "TrainMobileModest.h"
 #include "Runtime/MediaAssets/Public/MediaSource.h"
 
 

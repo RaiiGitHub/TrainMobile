@@ -49,6 +49,7 @@ enum ESocketServerReconnect
 UENUM(BlueprintType)
 enum ETalkMessageType
 {
+	E_MSG_NONE = 0,
 	E_MSG_WORLD = 1,
 	E_MSG_TEAM = 2
 };
@@ -56,6 +57,7 @@ enum ETalkMessageType
 UENUM(BlueprintType)
 enum ETaskActionPassbyResultType
 {
+	E_APRT_NONE = 0,
 	E_APRT_SELF_CAN_DO = 1,
 	E_APRT_OTHER_DO = 2,
 	E_APRT_USER_NOT_FOUND =3
@@ -64,6 +66,7 @@ enum ETaskActionPassbyResultType
 UENUM(BlueprintType)
 enum EScriptState
 {
+	EScriptSatet_None = 0,
 	EScriptState_Active = 1,
 	EScriptState_Inactive = 2,
 	EScriptState_Unvalid = 3

@@ -1,8 +1,8 @@
 // As Part of GuangZhou Training.
 
+#include "TaskFunction.h"
 #include "TrainMobileModest.h"
 #include "TaskStateMachine.h"
-#include "TaskFunction.h"
 #include "TaskState.h"
 #include "TaskSequencer.h"
 #include "TaskPool.h"

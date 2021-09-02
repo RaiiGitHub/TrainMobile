@@ -6,20 +6,23 @@ public class TrainOnline : ModuleRules
 {
 	public TrainOnline(ReadOnlyTargetRules Target) : base(Target)
     {
-        PublicIncludePaths.AddRange(
+		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+		PublicIncludePaths.AddRange(
 			new string[] {
-                "TrainOnline/Classes",
-                "TrainOnline/Public",
-                "Runtime/Sockets/Public",
-                "Runtime/Networking/Public/Interfaces",
-                "HTTP",
+				"Runtime/Sockets/Public",
+				"Runtime/Networking/Public/Interfaces",
+				"Runtime/Core/Public/Modules",
+				"Runtime/Online/HTTP",
+                ModuleDirectory + "/TrainOnline/Classes",
+                ModuleDirectory + "/TrainOnline/Public",
                 ModuleDirectory + "/../../../LuaProvider/Source/LuaProvider/Lua/Include"
 				// ... add public include paths required here ...
 			}
 			);
         PrivateIncludePaths.AddRange(
 			new string[] {
-                "TrainOnline/Private"
+				ModuleDirectory + "/TrainOnline/Private"
 				// ... add other private include paths required here ...
 			}
 			);

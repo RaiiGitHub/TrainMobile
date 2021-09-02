@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "HumanCharacter.h"
+#include "TrainMobileModest.h"
 #include "RoleFollowLabelComponent.h"
 #include "SpriteActor.h"
 #include "PawnHandler.h"
@@ -17,8 +17,7 @@ AHumanCharacter::AHumanCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	GetMesh()->RelativeRotation = FRotator(0,90,0);
-	GetMesh()->RelativeLocation = FVector(0,0,-97);
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -97), FRotator(0, 90, 0));
 	// set our turn rates for input
 	bJumpButtonDown = false;
 	bTakeOnObject = false;
@@ -67,8 +66,7 @@ AHumanCharacter::AHumanCharacter()
 	MeshStaticObject->SetupAttachment(MeshSlot);
 	MeshStaticObject->bCastDynamicShadow = true;
 	MeshStaticObject->CastShadow = true;
-	MeshStaticObject->RelativeRotation = FRotator(-72.325127, 124.104874, 24.794298);
-	MeshStaticObject->RelativeLocation = FVector(39.264015, -23.918957, -15.51705);
+	MeshStaticObject->SetRelativeLocationAndRotation(FVector(39.264015, -23.918957, -15.51705), FRotator(-72.325127, 124.104874, 24.794298));
 
 	//particle system
 	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystem"));
@@ -85,8 +83,7 @@ AHumanCharacter::AHumanCharacter()
 	RoleLabel = CreateDefaultSubobject<URoleFollowLabelComponent>(TEXT("RoleLabel"));
 	RoleLabel->SetRoleLabelText(FText::FromString(TEXT("")));
 	RoleLabel->SetupAttachment(GetCapsuleComponent());
-	RoleLabel->RelativeLocation = FVector(0, 0, 100.f);
-	RoleLabel->RelativeRotation = FRotator(0,-70,0);
+	RoleLabel->SetRelativeLocationAndRotation(FVector(0, 0, 100.f), FRotator(0, -70, 0));
 
 	//sprite
 	SpriteCollision1 = CreateDefaultSubobject<USphereComponent>(TEXT("SpriteCollision1"));
@@ -246,8 +243,7 @@ void AHumanCharacter::FixHandupPose(bool as_normal)
 		return;
 	if (as_normal)
 	{
-		MeshStaticObject->RelativeRotation = FRotator(-72.325127, 124.104874, 24.794298);
-		MeshStaticObject->RelativeLocation = FVector(39.264015, -23.918957, -15.51705);
+		MeshStaticObject->SetRelativeLocationAndRotation(FVector(39.264015, -23.918957, -15.51705), FRotator(-72.325127, 124.104874, 24.794298));
 		//change to another object.
 		AStaticMeshActor* actor = FindObject<AStaticMeshActor>(ANY_PACKAGE, TEXT("miehuoqi"));
 		if (nullptr != actor)
@@ -255,8 +251,7 @@ void AHumanCharacter::FixHandupPose(bool as_normal)
 	}
 	else
 	{
-		MeshStaticObject->RelativeRotation = FRotator(19.092146, 146.170944, 21.728527);
-		MeshStaticObject->RelativeLocation = FVector(-22.239243, -8.095934, -48.913654);
+		MeshStaticObject->SetRelativeLocationAndRotation(FVector(-22.239243, -8.095934, -48.913654), FRotator(19.092146, 146.170944, 21.728527));
 		//change to another object.
 		AStaticMeshActor* actor = FindObject<AStaticMeshActor>(ANY_PACKAGE, TEXT("miehuoqi_work"));
 		if ( nullptr != actor)

@@ -16,9 +16,9 @@
 	"Modules": [
 		{
 			"Name": "LuaProvider",
-			"Type": "Developer",
+			"Type": "Runtime",
       "LoadingPhase": "Default",
-      "WhitelistPlatforms": [ "Android", "Mac", "Win32", "Win64"]
+      "WhitelistPlatforms": [ "Android", "Mac", "Win64"]
 		}
 	]
 }

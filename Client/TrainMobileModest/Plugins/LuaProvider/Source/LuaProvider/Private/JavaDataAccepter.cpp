@@ -1,5 +1,5 @@
-#include "LuaProviderPrivatePCH.h"
 #include "JavaDataAccepter.h"
+#include "LuaProviderPrivatePCH.h"
 #include "Misc/Paths.h"
 #include "LuaMachine.h"
 #if PLATFORM_ANDROID

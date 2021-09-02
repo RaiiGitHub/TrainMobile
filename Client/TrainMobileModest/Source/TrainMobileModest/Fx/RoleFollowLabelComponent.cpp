@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "RoleFollowLabelComponent.h"
+#include "TrainMobileModest.h"
 #include "Kismet/GameplayStatics.h"
 
 void URoleFollowLabelComponent::UpdateRoleLabel()

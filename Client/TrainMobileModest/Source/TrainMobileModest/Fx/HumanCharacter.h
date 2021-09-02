@@ -100,12 +100,12 @@ public:
 
 private:
 	bool bParticleEffectOpen;
-	AStaticMeshActor* HoldOnActor; // actor to be hold on,or took up.
+	class AStaticMeshActor* HoldOnActor; // actor to be hold on,or took up.
 	TMap<FString, bool> LogicKeys; //other logic keys.	
 	void FixHandupPose(bool as_normal);
 public:
 	TMap<FString, bool>& GetLogicKeys();
-	AStaticMeshActor* GetHoldOnMesh();
+	class AStaticMeshActor* GetHoldOnMesh();
 	void SetHoldOnMesh(AStaticMeshActor* mesh);
 	void ParticlePress();
 	void ParticleRelease();

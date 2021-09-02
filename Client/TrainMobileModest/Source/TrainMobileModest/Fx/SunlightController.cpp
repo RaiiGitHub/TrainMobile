@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "SunlightController.h"
+#include "TrainMobileModest.h"
 
 
 // Sets default values

@@ -1,7 +1,7 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
-#include "TrainOnlinePrivatePCH.h"
 #include "TrainOnline.h"
+#include "TrainOnlinePrivatePCH.h"
 
 IMPLEMENT_MODULE(FTrainOnlineModule, TrainOnline)
 

@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "PawnHandler.h"
+#include "TrainMobileModest.h"
 #include "HumanCharacter.h"
 #include "TextureFinder.h"
 #include "TaskPool.h"

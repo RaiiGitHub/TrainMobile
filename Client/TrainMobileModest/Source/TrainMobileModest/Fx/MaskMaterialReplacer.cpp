@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "MaskMaterialReplacer.h"
+#include "TrainMobileModest.h"
 #include "TextureFinder.h"
 
 
@@ -60,7 +60,7 @@ bool AMaskMaterialReplacer::AddMeshComponent(
 		mm.maskTexParamName = mask_tex_param_name;
 		mm.masked = true;
 		TArray<UTexture*> texs;
-		mm.miOrigin->GetUsedTextures(texs, EMaterialQualityLevel::Medium, true, ERHIFeatureLevel::ES2, true);
+		mm.miOrigin->GetUsedTextures(texs, EMaterialQualityLevel::Medium, true, ERHIFeatureLevel::ES3_1, true);
 		if (texs.Num() > 0)
 			mm.miTemplate->SetTextureParameterValue(mm.originTexParamName, texs[0]);
 		p_mm = &MaskMeshes[MaskMeshes.AddUnique(mm)];	

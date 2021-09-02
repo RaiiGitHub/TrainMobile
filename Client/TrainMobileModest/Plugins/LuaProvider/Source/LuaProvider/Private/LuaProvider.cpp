@@ -1,6 +1,6 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
-#include "LuaProviderPrivatePCH.h"
 #include "LuaProvider.h"
+#include "LuaProviderPrivatePCH.h"
 #include "ModuleManager.h"
 #include "IPluginManager.h"
 

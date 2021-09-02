@@ -1,5 +1,5 @@
-#include "TrainOnlinePrivatePCH.h"
 #include "NotificationDescriptor.h"
+#include "TrainOnlinePrivatePCH.h"
 
 FNotificationDescriptor::FNotificationDescriptor()
 {

@@ -1,7 +1,6 @@
 #define VERSION_4_18 1
-
-#include "LuaProviderPrivatePCH.h"
 #include "LuaMachine.h"
+#include "LuaProviderPrivatePCH.h"
 #include "Misc/Paths.h"
 #if VERSION_4_18
 #include "HAL/PlatformApplicationMisc.h"
@@ -64,7 +63,7 @@ void FLuaMachine::Initialize()
 
 	FString cpacExt(TEXT("?.so'"));
 #if PLATFORM_WINDOWS
-	LuaSearchPath = FPaths::GamePluginsDir();
+	LuaSearchPath = FPaths::ProjectPluginsDir();//FPaths::GamePluginsDir();
 	LuaSearchCPath = LuaSearchPath;
 	LuaSearchPath.Append(TEXT("LuaProvider/Source/LuaProvider/Lua/Script/"));
 	LuaSearchCPath.Append(TEXT("LuaProvider/Content/Lib/Win64/Release/"));

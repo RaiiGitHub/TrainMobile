@@ -16,6 +16,7 @@ Client/TrainMobileModest/Plugins/TrainOnline/Binaries/
 Client/TrainMobileModest/Plugins/TrainOnline/Intermediate/
 Client/TrainMobileModest/TrainMobileModest.sdf
 Client/TrainMobileModest/TrainMobileModest.VC.db
+Client/TrainMobileModest/.vs
 *.opendb
 *.opensdf
 *.suo

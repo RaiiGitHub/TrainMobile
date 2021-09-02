@@ -7,10 +7,13 @@ public class TrainMobileModest : ModuleRules
 {
     public TrainMobileModest(ReadOnlyTargetRules Target) : base(Target)
     {
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","UMG" });
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","UMG", "AIModule" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+        PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "."));
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Widgets"));
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Tool"));
         PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Fx"));
@@ -28,14 +31,5 @@ public class TrainMobileModest : ModuleRules
 
         if ((Target.Platform == UnrealTargetPlatform.Android))
             PrivateDependencyModuleNames.AddRange(new string[] { "AndroidMoviePlayer"});
-    // Uncomment if you are using online features
-    // PrivateDependencyModuleNames.Add("OnlineSubsystem");
-    // if ((Target.Platform == UnrealTargetPlatform.Win32) || (Target.Platform == UnrealTargetPlatform.Win64))
-    // {
-    //		if (UEBuildConfiguration.bCompileSteamOSS == true)
-    //		{
-    //			DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
-    //		}
-    // }
 }
 }

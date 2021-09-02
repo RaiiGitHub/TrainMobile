@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "StagePackHelper.h"
+#include "TrainMobileModest.h"
 #include "TextureFinder.h"
 #include "TaskPool.h"
 

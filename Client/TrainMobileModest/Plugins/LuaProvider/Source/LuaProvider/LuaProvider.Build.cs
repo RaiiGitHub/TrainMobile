@@ -6,6 +6,8 @@ public class LuaProvider : ModuleRules
 {
 	public LuaProvider(ReadOnlyTargetRules Target) : base(Target)
 	{
+		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
 			// Add the import library
@@ -24,15 +26,17 @@ public class LuaProvider : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				"LuaProvider/Public",
-				"LuaProvider/Classes"
+				"Runtime/Core/Public/Modules",
+				"Runtime/Projects/Public/Interfaces",
+				ModuleDirectory + "/Public",
+				ModuleDirectory + "/Classes"
 				// ... add public include paths required here ...
 			}
 			);
 		PrivateIncludePaths.AddRange(
 			new string[] {
-                "LuaProvider/Private",
-				"LuaProvider/Lua/Include"
+				ModuleDirectory + "/Private",
+				ModuleDirectory + "/Lua/Include"
 				// ... add other private include paths required here ...
 			}
 			);

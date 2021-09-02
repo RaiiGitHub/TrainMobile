@@ -1,8 +1,8 @@
 // As Part of GuangZhou Training.
 
+#include "SunlightSimulator.h"
 #include "TrainMobileModest.h"
 #include "SunlightController.h"
-#include "SunlightSimulator.h"
 
 SunlightSimulator::SunlightSimulator()
 	: Simulating(false)

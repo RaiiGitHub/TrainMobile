@@ -1,5 +1,5 @@
-#include "TrainOnlinePrivatePCH.h"
 #include "LobbyStateMachine.h"
+#include "TrainOnlinePrivatePCH.h"
 #include "TrainOnlineActor.h"
 
 FLobbyStateMachine::FLobbyStateMachine()

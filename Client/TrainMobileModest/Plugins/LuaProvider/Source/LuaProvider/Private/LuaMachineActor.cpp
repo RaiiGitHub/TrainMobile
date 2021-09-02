@@ -1,8 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
-
+#include "LuaMachineActor.h"
 #include "LuaProviderPrivatePCH.h"
 #include "LuaProvider.h"
-#include "LuaMachineActor.h"
 
 ALuaMachineActor::ALuaMachineActor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

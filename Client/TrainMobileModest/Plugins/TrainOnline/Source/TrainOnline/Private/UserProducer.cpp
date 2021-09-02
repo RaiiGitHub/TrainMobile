@@ -1,5 +1,5 @@
-#include "TrainOnlinePrivatePCH.h"
 #include "UserProducer.h"
+#include "TrainOnlinePrivatePCH.h"
 
 FString FUserProducer::InnerVersion = TEXT("v1.2.0608");
 

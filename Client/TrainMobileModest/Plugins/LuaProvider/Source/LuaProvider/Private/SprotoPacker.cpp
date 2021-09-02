@@ -1,8 +1,8 @@
+#include "SprotoPacker.h"
 #include "LuaProviderPrivatePCH.h"
 #include "LuaMachine.h"
 #include "Misc/Paths.h"
 #include "sprotodef.h"
-#include "SprotoPacker.h"
 
 TSharedPtr<FLuaMachine> FSprotoPacker::LuaMachine = MakeShareable<FLuaMachine>(new FLuaMachine);
 FSprotoPacker* FSprotoPacker::SprotoPackerIns = nullptr;

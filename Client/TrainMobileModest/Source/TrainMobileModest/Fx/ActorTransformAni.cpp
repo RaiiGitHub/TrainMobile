@@ -1,7 +1,7 @@
 // As Part of GuangZhou Training.
 
-#include "TrainMobileModest.h"
 #include "ActorTransformAni.h"
+#include "TrainMobileModest.h"
 #include "TaskPool.h"
 #include "PawnHandler.h"
 #include "CallbackActor.h"
@@ -269,7 +269,7 @@ void AActorTransformAni::ReachMonitor(float DeltaSeconds)
 				}
 				else
 				{
-					if ( mesh.mesh && !mesh.mesh->bHidden )
+					if ( mesh.mesh && !mesh.mesh->IsHidden() )
 						mesh.mesh->SetActorHiddenInGame(true);
 				}
 			}

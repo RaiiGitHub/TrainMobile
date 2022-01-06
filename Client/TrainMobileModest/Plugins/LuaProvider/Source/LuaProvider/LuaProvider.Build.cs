@@ -11,17 +11,18 @@ public class LuaProvider : ModuleRules
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
 			// Add the import library
-			PublicLibraryPaths.Add(Path.Combine(ModuleDirectory, "../../Content","Lib", "Win64", "Release"));
-			PublicAdditionalLibraries.Add("lua53.lib");
+			string LibraryPath = Path.Combine(ModuleDirectory, "../../Content", "Lib", "Win64", "Release");
+			PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "lua53.lib"));
             // Delay-load the DLL, so we can load it from the right place first
             PublicDelayLoadDLLs.Add("lua53.dll");
-        }
+			RuntimeDependencies.Add(Path.Combine(LibraryPath, "lua53.dll"));
+		}
         else if (Target.Platform == UnrealTargetPlatform.Android)
         {
-            PublicLibraryPaths.Add(Path.Combine(ModuleDirectory,"../../Content", "Lib", "Android", "armeabi-v7a"));
-            PublicAdditionalLibraries.Add("lua");
+			string LibraryPath = Path.Combine(ModuleDirectory, "../../Content", "Lib", "Android", "armeabi-v7a");
+            PublicAdditionalLibraries.Add(Path.Combine(LibraryPath, "/lua"));
             string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target/*BuildConfiguration*/.RelativeEnginePath);
-            AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "LuaProvider_APL.xml")));
+            AdditionalPropertiesForReceipt.Add("AndroidPlugin", Path.Combine(PluginPath, "LuaProvider_APL.xml"));
         }
 		
 		PublicIncludePaths.AddRange(
